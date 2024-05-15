@@ -30,4 +30,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.GONE.value(), ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.GONE);
     }
+    // 허용되지 않은 파일 형식
+    @ExceptionHandler(FileTypeNotAllowedException.class)
+    public ResponseEntity<ErrorResponse> handleFileTypeNotAllowedException(FileTypeNotAllowedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
