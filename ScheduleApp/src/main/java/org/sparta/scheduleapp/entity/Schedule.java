@@ -16,6 +16,7 @@ public class Schedule {
     private String assignee;
     private String date;
     private String password;
+    private boolean isDeleted = false;
 
     public Schedule(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
