@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.sparta.scheduleapp.dto.ScheduleRequestDto;
 import org.sparta.scheduleapp.dto.ScheduleResponseDto;
 import org.sparta.scheduleapp.entity.Schedule;
+import org.sparta.scheduleapp.exception.InvalidPasswordException;
+import org.sparta.scheduleapp.exception.ScheduleAlreadyDeletedException;
+import org.sparta.scheduleapp.exception.ScheduleNotFoundException;
+import org.sparta.scheduleapp.exception.message.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,20 +61,24 @@ public class ScheduleController {
     @GetMapping("/schedule/{id}")
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(@PathVariable Long id) {
         Schedule schedule = scheduleList.get(id);
-        if (schedule != null) {
-            ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-            return ResponseEntity.ok(responseDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        if (schedule == null) {
+            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
         }
+        else if (schedule.isDeleted()) {
+            throw new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED);
+        }
+        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
+        return ResponseEntity.ok(responseDto);
+
     }
 
     //수정하기 put
     @PutMapping("/schedule/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+        Schedule schedule = scheduleList.get(id);
+
         if (scheduleList.containsKey(id)) {
             //schedule request로 받은 Dto -> Entity에 받아와서 set하고 ResponseEntity로 반환
-            Schedule schedule = scheduleList.get(id);
             schedule.update(requestDto);
 
             schedule.setTitle(requestDto.getTitle());
@@ -81,35 +89,41 @@ public class ScheduleController {
             scheduleList.put(id, schedule);
 
             return ResponseEntity.status(HttpStatus.OK).body(new ScheduleResponseDto(schedule));
+        }else if (schedule.isDeleted()) {
+            throw new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
         }
     }
 
     // 삭제: id 받아와서 list에서 삭제후 성공 실패 반환
     @DeleteMapping("/schedule/{id}")
     public ResponseEntity<String> deleteSchedule(@PathVariable Long id) {
+        Schedule schedule = scheduleList.get(id);
         if (scheduleList.containsKey(id)) {
             scheduleList.remove(id);
+            schedule.setDeleted(true);
             return ResponseEntity.status(HttpStatus.OK).body("success");
+        } else if (schedule.isDeleted()) {
+            throw new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
         }
     }
 
     //비밀번호 검증 post id받아서 검증후 성공 실패 보이기
     @PostMapping("/schedule/validatePassword/{id}")
     public ResponseEntity<Boolean> verifyPassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-        try {
-            String inputPassword = requestBody.get("password");
-            Schedule schedule = scheduleList.get(id);
-            if (schedule != null && schedule.getPassword().equals(inputPassword)) {
-                return ResponseEntity.ok(true);
-            }
-            return ResponseEntity.ok(false);
-        } catch (Exception e) {
-            log.error("Error verifying password: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        Schedule schedule = scheduleList.get(id);
+        String inputPassword = requestBody.get("password");
+
+        if (schedule == null) {
+            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
         }
+
+        if (!schedule.getPassword().equals(inputPassword)) {
+            throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);
+        }
+        return ResponseEntity.ok(true);
     }
-    }
+}
