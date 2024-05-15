@@ -80,6 +80,12 @@
 <script>
     $(document).ready(function() {
         fetchSchedules();
+        // 모달이 닫힐 때 저장 버튼과 취소 버튼을 초기화하는 이벤트 리스너 추가
+        $('#scheduleModal').on('hide.bs.modal', function () {
+            $('#editButton').show();
+            $('#deleteButton').show();
+            $('#saveButton').remove();
+        });
     });
 
     function fetchSchedules() {
