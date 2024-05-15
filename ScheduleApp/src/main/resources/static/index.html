@@ -240,13 +240,13 @@
     }
 
     function deleteSchedule(scheduleId) {
-        if (confirm('이 스케줄을 삭제하시겠습니까?')) { // 사용자가 삭제를 확인하면
+        if (confirm('이 스케줄을 삭제하시겠습니까?')) {
             $.ajax({
                 type: 'DELETE',
                 url: `/api/schedule/${scheduleId}`,
                 success: function() {
                     alert('스케줄이 성공적으로 삭제되었습니다.');
-                    $(`#schedule-${scheduleId}`).remove(); // 삭제된 스케줄 항목을 DOM에서 제거
+                    $(`#schedule-${scheduleId}`).remove();
                     $('#scheduleModal').modal('hide');
                 },
                 error: function() {
@@ -255,7 +255,6 @@
             });
         }
     }
-
 
     function showAddScheduleForm() {
         $('#scheduleFormModal').modal('show');
