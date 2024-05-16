@@ -33,18 +33,18 @@ public class FileController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            // 업로드된 파일의 원래 이름을 가져옵니다.
+            // 업로드된 파일의 원래 이름.
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-            // 파일 형식이 허용된 형식인지 확인합니다.
+            // 파일 형식이 허용된 형식인지 확인
             if (!isAllowedFileType(fileName)) {
                 throw new FileTypeNotAllowedException(ErrorMessage.INVALID_FILETYPE.getMessage());
             }
 
-            // 파일을 저장할 경로를 설정합니다.
+            // 파일을 저장할 경로를 설정
             Path path = Paths.get(UPLOAD_DIR + fileName);
 
-            // 경로가 존재하지 않으면 디렉토리를 생성합니다.
+            // 경로가 존재하지 않으면 디렉토리를 생성
             Files.createDirectories(path.getParent());
 
             // 파일을 경로에 저장합니다.
