@@ -82,7 +82,6 @@ public class ScheduleController {
         return ResponseEntity.ok(responseDto);
 
     }
-
     //수정하기 put
     @PutMapping("/schedule/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
