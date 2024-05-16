@@ -1,9 +1,9 @@
 package org.sparta.scheduleapp.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sparta.scheduleapp.dto.ScheduleRequestDto;
@@ -15,6 +15,7 @@ import org.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import org.sparta.scheduleapp.exception.message.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -25,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @RequestMapping("/api")
 @Tag(name = "ScheduleController", description = "스케줄 관리 API")
+@Validated
 public class ScheduleController {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final Map<Long, Schedule> scheduleList = new ConcurrentHashMap<>();
@@ -33,7 +35,7 @@ public class ScheduleController {
     // 스케줄 추가 post (/schedule) 요청데이터: 받을데이터:
     @PostMapping("/schedule")
     @Operation(summary = "스케줄 추가", description = "새로운 스케줄을 추가합니다.")
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // 1. 사용자 입력 ->DTO -> ENTITY -> 데이터 넣고 -> DTO -> ResponseEntity(DTO)로 반환
         try {
             log.info("Received schedule: {}", requestDto);
@@ -66,7 +68,6 @@ public class ScheduleController {
     // 상세보기 get
     @GetMapping("/schedule/{id}")
     @Operation(summary = "스케줄 상세 조회", description = "특정 스케줄의 상세 정보를 조회합니다.")
-    @ApiResponse(responseCode = "500", description = "내부 서버 오류")
 
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(@PathVariable Long id) {
         Schedule schedule = scheduleList.get(id);
@@ -85,7 +86,7 @@ public class ScheduleController {
     //수정하기 put
     @PutMapping("/schedule/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleList.get(id);
 
         if (scheduleList.containsKey(id)) {
@@ -110,11 +111,6 @@ public class ScheduleController {
     // 삭제: id 받아와서 list에서 삭제후 성공 실패 반환
     @DeleteMapping("/schedule/{id}")
     @Operation(summary = "스케줄 삭제", description = "특정 스케줄을 삭제합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "스케줄이 성공적으로 삭제됨"), // 정상 처리
-            @ApiResponse(responseCode = "404", description = "스케줄을 찾을 수 없음"), // 리소스를 찾을 수 없음
-            @ApiResponse(responseCode = "410", description = "스케줄이 이미 삭제됨") // 리소스가 이미 삭제됨
-    })
     public ResponseEntity<String> deleteSchedule(@PathVariable Long id) {
         Schedule schedule = scheduleList.get(id);
         if (scheduleList.containsKey(id)) {
