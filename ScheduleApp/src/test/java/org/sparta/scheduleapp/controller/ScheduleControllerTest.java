@@ -20,7 +20,6 @@ class ScheduleControllerTest {
     private ScheduleController scheduleController;
     private ConcurrentHashMap<Long, Schedule> scheduleList;
 
-
     @BeforeEach
     void setUp() {
         scheduleController = new ScheduleController();
