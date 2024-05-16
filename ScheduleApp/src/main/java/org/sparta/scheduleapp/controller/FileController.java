@@ -65,29 +65,29 @@ public class FileController {
     @GetMapping("/download/{fileName}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName) {
         try {
-            // 파일을 저장한 경로를 설정합니다.
+            // 파일을 저장한 경로를 설정
             Path path = Paths.get(UPLOAD_DIR + fileName);
             File file = path.toFile();
 
-            // 파일이 존재하지 않으면 404 NOT FOUND를 반환합니다.
+            // 파일이 존재하지 않으면 404
             if (!file.exists()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            // 파일을 읽어 바이트 배열로 변환합니다.
+            // 파일을 읽어 바이트 배열로 변환
             InputStream inputStream = new FileInputStream(file);
             byte[] fileBytes = inputStream.readAllBytes();
             inputStream.close();
 
-            // 파일 다운로드를 위한 헤더를 설정합니다.
+            // 다운로드헤더 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.setContentDispositionFormData("attachment", fileName);
 
-            // 파일의 바이트 배열과 함께 200 OK 응답을 반환합니다.
+            // 파일의 바이트 배열,  200 OK 응답을 반환
             return ResponseEntity.ok().headers(headers).body(fileBytes);
         } catch (IOException e) {
-            // 파일 읽기 중 예외가 발생하면 500 INTERNAL SERVER ERROR를 반환합니다.
+            // 파일 읽기 중 예외가 발생하면 50.
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
