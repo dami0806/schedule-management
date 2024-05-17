@@ -115,7 +115,7 @@ class ScheduleServiceTest {
     void deleteSchedule() {
         when(scheduleRepository.findById(anyLong())).thenReturn(schedule);
 
-        ResponseEntity<Boolean> response = scheduleService.verifyPassword(1L, "password");
+        ResponseEntity<Boolean> response = scheduleService.verifyPassword(1L, "비번1");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody());
     }
