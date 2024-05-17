@@ -1,5 +1,41 @@
 # SchedulingAppServer
 
+## 개요
+SchedulingAppServer는 일정 관리와 파일 업로드/다운로드 기능을 제공하는 RESTful API 서버 
+이 프로젝트는 사용자가 일정을 생성, 조회, 수정, 삭제하고 파일을 업로드 및 다운로드할 수 있다. 
+--- 
+
+## 사용된 기술
+- Java 11: 애플리케이션 개발 언어.
+- Spring Boot: 애플리케이션의 기반 프레임워크.
+- Spring Web: RESTful API 구현.
+- Spring Validation: 데이터 유효성 검사.
+- Spring Data JPA: 데이터베이스 접근 계층.
+- H2 Database: 인메모리 데이터베이스로 개발 및 테스트 환경에서 사용.
+- Lombok: 보일러플레이트 코드를 줄이기 위해 사용.
+- Mockito: 단위 테스트를 위한 목킹 프레임워크.
+- JUnit 5: 단위 테스트 프레임워크.
+- Swagger/OpenAPI: API 문서화.
+- Jakarta Validation: 데이터 유효성 검사를 위한 표준 API.
+- SLF4J with Logback: 로깅 프레임워크.
+---
+
+## 엔티티 설명
+- Schedule
+  - id: Long, primary key
+  - title: String, 제목
+  - description: String, 설명
+  - assignee: String, 담당자 이메일
+  - date: String, 날짜
+  - password: String, 비밀번호
+  - isDeleted: boolean, 삭제 여부
+- File
+  - fileName: String, 파일 이름
+  - fileType: String, 파일 형식
+  - filePath: String, 파일 경로
+  - uploadDate: Date, 업로드 날짜
+  - fileSize: Long, 파일 크기
+---
 ## 프로젝트 설명 및 이미지 
 
 | 작업 내용 | 사진 |
