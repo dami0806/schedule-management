@@ -1,8 +1,11 @@
 # SchedulingAppServer
 
 ## 개요
-SchedulingAppServer는 일정 관리와 파일 업로드/다운로드 기능을 제공하는 RESTful API 서버 
-이 프로젝트는 사용자가 일정을 생성, 조회, 수정, 삭제하고 파일을 업로드 및 다운로드할 수 있다. 
+
+SchedulingAppServer는 일정 관리와 파일 업로드/다운로드 기능을 제공하는 RESTful API 서버입니다.
+
+이 프로젝트는 사용자가 일정을 생성, 조회, 수정, 삭제하고 파일을 업로드 및 다운로드할 수 있습니다.
+
 --- 
 
 ## 사용된 기술
