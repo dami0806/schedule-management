@@ -1,30 +1,29 @@
 # SchedulingAppServer
 
-## 프로젝트 개요
+## 1. 프로젝트 개요
 이 프로젝트는 스케줄 관리 시스템으로, 사용자들이 일정을 효율적으로 관리할 수 있도록 돕는 애플리케이션입니다.  
 사용자는 새로운 일정을 추가하고, 기존 일정을 수정 및 삭제할 수 있으며, 모든 일정을 조회할 수 있습니다.  
 또한 파일 업로드 및 다운로드 기능을 제공해서, 일정과 관련된 파일을 관리할 수 있습니다.
 
-## 프로젝트 세부 사항
+##  프로젝트 세부 사항
 
-### 기술 스택
+### 2. 기술 스택
 - Spring Boot
 - MySQL
 - JDBC: 초기 단계에서는 JDBC를 통해 MySQL 데이터베이스와의 상호작용을 구현했습니다.
 - JPA: 향후 JPA로 전환하여 데이터베이스 작업을 더욱 효율적으로 처리할 계획입니다.
 
-### 기능
+### 3. 기능
 - 스케줄 관리: 사용자는 스케줄을 추가, 수정, 삭제, 조회할 수 있습니다.
 - 파일 관리: 파일 업로드 및 다운로드 기능을 제공합니다.
 - 비밀번호 검증: 특정 스케줄의 비밀번호를 검증할 수 있습니다.
 
-### 구현 과정
+### 4. 구현 과정
 - 초기 단계: 애플리케이션은 내부에서 List를 사용해서 스케줄을 관리했습니다.
 - 중간 단계: JDBC를 사용해서 MySQL 데이터베이스에 스케줄을 저장하도록 전환했습니다.
 - 향후 계획: JPA를 도입해서 데이터베이스 상호작용을 더욱 효율적으로 구현할 예정입니다.
---- 
 
-## 사용된 기술
+## 5. 사용된 기술
 - Java 11: 애플리케이션 개발 언어.
 - Spring Boot: 애플리케이션의 기반 프레임워크.
 - Spring Web: RESTful API 구현.
@@ -39,7 +38,7 @@
 - SLF4J with Logback: 로깅 프레임워크.
 ---
 
-## 엔티티 설명
+## 6. 엔티티 설명
 - Schedule
   - id: Long, primary key
   - title: String, 제목
@@ -55,7 +54,8 @@
   - uploadDate: Date, 업로드 날짜
   - fileSize: Long, 파일 크기
 ---
-## 프로젝트 설명 및 이미지 
+
+## 7. 프로젝트 설명 및 이미지 
 
 | 작업 내용 | 사진 |
 |-----------|------|
@@ -67,7 +67,7 @@
 | **Swagger** | <img width="500" alt="프로젝트 스크린샷" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/f7afa26a-b058-4653-bb4e-5b9bffe87145"> |
 | Jacoco  | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/37584e7d-241a-464a-84ff-bbdec5b546d8"> <br> - 정상처리만 테스트해서 코드 커버리지낮음|
 
-# ⚡️사용된 기술 개념
+# ⚡️8. 사용된 기술 개념
 
 ###  [Exception처리](https://github.com/dami0806/ScheduleManagement/wiki/Exception%EC%B2%98%EB%A6%AC#%EC%9A%94%EC%95%BD)
 ### [Swagger](https://github.com/dami0806/ScheduleManagement/wiki/Swagger#%EC%9C%A0%ED%9A%A8%EC%84%B1-%EA%B2%80%EC%82%AC%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
