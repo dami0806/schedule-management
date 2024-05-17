@@ -1,5 +1,6 @@
 package org.sparta.scheduleapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sparta.scheduleapp.controller.ScheduleController;
@@ -20,15 +21,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ScheduleService {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleRepository scheduleRepository;
-
-    @Autowired
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
 
     public ResponseEntity<ScheduleResponseDto> createSchedule(ScheduleRequestDto requestDto) {
         try {
