@@ -2,15 +2,17 @@ package com.sparta.scheduleapp.entity;
 
 import com.sparta.scheduleapp.dto.ScheduleRequestDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+
 @Table(name = "schedule")
 public class Schedule {
     //엔티티 -> 데이터베이스에 넘길것
@@ -41,12 +43,14 @@ public class Schedule {
         this.date = requestDto.getDate();
         this.password = requestDto.getPassword();
     }
-
-    public void update(ScheduleRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.description = requestDto.getDescription();
-        this.assignee = requestDto.getAssignee();
-        this.date = requestDto.getDate();
-    }
      */
+
+    public void update(String title, String description, String assignee, String date, String password) {
+        this.title = title;
+        this.description = description;
+        this.assignee = assignee;
+        this.date = date;
+        this.password = password;
+    }
+
 }

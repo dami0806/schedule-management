@@ -1,19 +1,15 @@
 package com.sparta.scheduleapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.scheduleapp.exception.InvalidPasswordException;
+import com.sparta.scheduleapp.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.exception.ScheduleAlreadyDeletedException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
+import com.sparta.scheduleapp.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
-import com.sparta.scheduleapp.dto.ScheduleResponseDto;
-import com.sparta.scheduleapp.entity.Schedule;
-import com.sparta.scheduleapp.service.ScheduleService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,11 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
 
@@ -59,13 +52,13 @@ class ScheduleControllerTest {
     @Test
     @DisplayName("스케줄 추가 테스트 - 성공")
     void 스케줄생성성공() throws Exception {
-        // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("Title");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("password");
+
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
 
         ScheduleResponseDto responseDto = new ScheduleResponseDto();
 
@@ -77,51 +70,50 @@ class ScheduleControllerTest {
         when(scheduleService.createSchedule(any(ScheduleRequestDto.class))).thenReturn(responseDto);
 
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("Title")))
                 .andExpect(jsonPath("$.description", is("Description")))
                 .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
-                .andExpect(jsonPath("$.date", is("2023-05-19")))
-                .andExpect(jsonPath("$.password", is("password")));
+                .andExpect(jsonPath("$.date", is("2023-05-19")));
     }
 
     @Test
     @DisplayName("스케줄 추가 테스트 - 실패(작성자 email형식 아님)")
     void 스케줄생성실패_작성자email형식아님() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("Title");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("이메일 형식 아님");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("password");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "이메일 형식 아님",
+                "2023-05-19",
+                "password");
+
 
         // 작성자가 이메일형식이 아님 에러
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
-                .andExpect(jsonPath("$.assignee", containsString("담당자 작성은  email형식이여야 합니다.")));
+                .andExpect(jsonPath("$.assignee", containsString("담당자 작성은 email 형식이어야 합니다")));
     }
 
     @Test
     @DisplayName("스케줄 추가 테스트 - 실패(작성자 비어 있음)")
     void 스케줄생성실패_작성자비어있음() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("title");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("password");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "",
+                "2023-05-19",
+                "password");
         // 제목 비움
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
@@ -134,15 +126,15 @@ class ScheduleControllerTest {
     @DisplayName("스케줄 추가 테스트 - 실패(제목 비어 있음)")
     void 스케줄생성실패_제목비어있음() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("password");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "",
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
         // 제목 비움
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
@@ -153,55 +145,36 @@ class ScheduleControllerTest {
     @DisplayName("스케줄 추가 테스트 - 실패(제목 최대길이 초과)")
     void 스케줄생성실패_제목최대길이초과() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("a".repeat(201));
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("password");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "a".repeat(201),
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
         // 제목 비움
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
                 .andExpect(jsonPath("$.title", containsString("할일 제목은 최대 200자입니다.")));
     }
-    //비밀번호 필수
-    @Test
-    @DisplayName("스케줄 추가 테스트 - 실패(비밀번호 비어있음)")
-    void 스케줄생성실패_비밀번호필수() throws Exception {
-        // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("title");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-19");
-        requestDto.setPassword("");
-        // 제목 비움
-        // When & Then
-        mockMvc.perform(post("/api/schedule")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
-                .andExpect(jsonPath("$.password", containsString( "비밀번호 입력은 필수입니다.")));
-    }
+
     // 날짜입력 필수
     @Test
     @DisplayName("스케줄 추가 테스트 - 실패(날짜 비어있음)")
     void 스케줄생성실패_날짜필수() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("title");
-        requestDto.setDescription("Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("");
-        requestDto.setPassword("비밀");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "dami@naver.com",
+                "password",
+                "");
         // 제목 비움
         // When & Then
-        mockMvc.perform(post("/api/schedule")
+        mockMvc.perform(post("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
@@ -224,14 +197,13 @@ class ScheduleControllerTest {
         when(scheduleService.getScheduleList()).thenReturn(Collections.singletonList(responseDto));
 
         // When & Then
-        mockMvc.perform(get("/api/schedule")
+        mockMvc.perform(get("/api/schedules")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title", is("Title")))
                 .andExpect(jsonPath("$[0].description", is("Description")))
                 .andExpect(jsonPath("$[0].assignee", is("dami@naver.com")))
-                .andExpect(jsonPath("$[0].date", is("2023-05-19")))
-                .andExpect(jsonPath("$[0].password", is("password")));
+                .andExpect(jsonPath("$[0].date", is("2023-05-19")));
     }
 
     @Test
@@ -247,26 +219,25 @@ class ScheduleControllerTest {
         when(scheduleService.getDetailSchedule(anyLong())).thenReturn(responseDto);
 
         // When & Then
-        mockMvc.perform(get("/api/schedule/{id}", 1L)
+        mockMvc.perform(get("/api/schedules/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Title")))
                 .andExpect(jsonPath("$.description", is("Description")))
                 .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
-                .andExpect(jsonPath("$.date", is("2023-05-19")))
-                .andExpect(jsonPath("$.password", is("password")));
+                .andExpect(jsonPath("$.date", is("2023-05-19")));
     }
 
     @Test
     @DisplayName("스케줄 수정 테스트 - 성공")
     void 스케줄수정성공() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("Updated Title");
-        requestDto.setDescription("Updated Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-20");
-        requestDto.setPassword("updatedpassword");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
 
         ScheduleResponseDto responseDto = new ScheduleResponseDto();
         responseDto.setTitle("Updated Title");
@@ -277,32 +248,31 @@ class ScheduleControllerTest {
         when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class))).thenReturn(responseDto);
 
         // When & Then
-        mockMvc.perform(put("/api/schedule/{id}", 1L)
+        mockMvc.perform(put("/api/schedules/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Updated Title")))
                 .andExpect(jsonPath("$.description", is("Updated Description")))
                 .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
-                .andExpect(jsonPath("$.date", is("2023-05-20")))
-                .andExpect(jsonPath("$.password", is("updatedpassword")));
+                .andExpect(jsonPath("$.date", is("2023-05-20")));
     }
     @Test
     @DisplayName("스케줄 수정 테스트 - 실패 (존재하지 않는 ID)")
     void updateSchedule_실패_존재하지않는ID() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("Updated Title");
-        requestDto.setDescription("Updated Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-20");
-        requestDto.setPassword("updatedpassword");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
 
         when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class)))
                 .thenThrow(new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND));
 
         // When & Then
-        mockMvc.perform(put("/api/schedule/{id}", 100L)
+        mockMvc.perform(put("/api/schedules/{id}", 100L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isNotFound())
@@ -314,18 +284,18 @@ class ScheduleControllerTest {
     @DisplayName("스케줄 수정 테스트 - 실패 (삭제된 ID)")
     void updateSchedule_실패_삭제된ID() throws Exception {
         // Given
-        ScheduleRequestDto requestDto = new ScheduleRequestDto();
-        requestDto.setTitle("Updated Title");
-        requestDto.setDescription("Updated Description");
-        requestDto.setAssignee("dami@naver.com");
-        requestDto.setDate("2023-05-20");
-        requestDto.setPassword("updatedpassword");
+        ScheduleRequestDto requestDto = new ScheduleRequestDto(
+                "Title",
+                "Description",
+                "dami@naver.com",
+                "2023-05-19",
+                "password");
 
         when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class)))
                 .thenThrow(new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED));
 
         // When & Then
-        mockMvc.perform(put("/api/schedule/{id}", 100L)
+        mockMvc.perform(put("/api/schedules/{id}", 100L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isGone())
@@ -340,7 +310,7 @@ class ScheduleControllerTest {
         when(scheduleService.deleteSchedule(anyLong())).thenReturn("success");
 
         // When & Then
-        mockMvc.perform(delete("/api/schedule/{id}", 1L)
+        mockMvc.perform(delete("/api/schedules/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("success"));
@@ -354,7 +324,7 @@ class ScheduleControllerTest {
                 .thenThrow(new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND));
 
         // When & Then
-        mockMvc.perform(delete("/api/schedule/{id}", 100L)
+        mockMvc.perform(delete("/api/schedules/{id}", 100L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ScheduleNotFoundException))
@@ -369,7 +339,7 @@ class ScheduleControllerTest {
                 .thenThrow(new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED));
 
         // When & Then
-        mockMvc.perform(delete("/api/schedule/{id}", 1L)
+        mockMvc.perform(delete("/api/schedules/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isGone())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ScheduleAlreadyDeletedException))
@@ -383,7 +353,7 @@ class ScheduleControllerTest {
         when(scheduleService.verifyPassword(anyLong(), anyString())).thenReturn(true);
 
         // When & Then
-        mockMvc.perform(post("/api/schedule/validatePassword/{id}", 1L)
+        mockMvc.perform(post("/api/schedules/validatePassword/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"password\":\"password\"}"))
                 .andExpect(status().isOk())

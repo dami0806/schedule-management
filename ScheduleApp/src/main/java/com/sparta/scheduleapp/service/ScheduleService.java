@@ -31,12 +31,16 @@ public class ScheduleService {
     //public ResponseEntity<ScheduleResponseDto> createSchedule(ScheduleRequestDto requestDto) {
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
             //Dto -> Entity 넣고 저장
-            Schedule schedule = new Schedule();
-            schedule.setTitle(requestDto.getTitle());
-            schedule.setDescription(requestDto.getDescription());
-            schedule.setAssignee(requestDto.getAssignee());
-            schedule.setDate(requestDto.getDate());
-            schedule.setPassword(requestDto.getPassword());
+            Schedule schedule = new Schedule(
+                    1L,
+                    requestDto.getTitle(),
+                    requestDto.getDescription(),
+                    requestDto.getAssignee(),
+                    requestDto.getDate(),
+                    requestDto.getPassword(),
+                    false
+            );
+
 
             scheduleRepository.save(schedule);
 
@@ -83,17 +87,13 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+        Schedule schedule = findSchedule(id);
+        schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());
+        scheduleRepository.save(schedule);
+        return new ScheduleResponseDto(schedule);
 
-            Schedule schedule = findSchedule(id);
-            schedule.setTitle(requestDto.getTitle());
-            schedule.setDescription(requestDto.getDescription());
-            schedule.setAssignee(requestDto.getAssignee());
-            schedule.setDate(requestDto.getDate());
-            scheduleRepository.save(schedule);
-
-           // schedule.update(requestDto);
-            return new ScheduleResponseDto(schedule);
     }
+
 
 
     private Schedule findSchedule(Long id) {
