@@ -79,18 +79,20 @@ public class FileController {
             byte[] fileBytes = inputStream.readAllBytes();
             inputStream.close();
 
-            // 다운로드헤더 설정
+            // 다운로드 헤더 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.setContentDispositionFormData("attachment", fileName);
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileName);
 
             // 파일의 바이트 배열,  200 OK 응답을 반환
             return ResponseEntity.ok().headers(headers).body(fileBytes);
         } catch (IOException e) {
-            // 파일 읽기 중 예외가 발생하면 50.
+            // 파일 읽기 중 예외가 발생하면 500
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
     /**

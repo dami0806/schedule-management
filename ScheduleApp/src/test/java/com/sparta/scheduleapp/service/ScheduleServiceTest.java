@@ -49,16 +49,14 @@ class ScheduleServiceTest {
     requestDto.setPassword("password");
 
     //when
-    ResponseEntity<ScheduleResponseDto> response =
+   ScheduleResponseDto response =
             scheduleService.createSchedule(requestDto);
 
-    //then
-    assertEquals(HttpStatus.CREATED, response.getStatusCode());
-    assertEquals("Title", response.getBody().getTitle());
-    assertEquals("Description", response.getBody().getDescription());
-    assertEquals("Assignee", response.getBody().getAssignee());
-    assertEquals("2023-05-19", response.getBody().getDate());
-    assertEquals("password", response.getBody().getPassword());
+        //then
+        assertEquals("Title", response.getTitle());
+        assertEquals("Description", response.getDescription());
+        assertEquals("Assignee", response.getAssignee());
+        assertEquals("2023-05-19", response.getDate());
 }
 
 
@@ -71,7 +69,6 @@ class ScheduleServiceTest {
         schedule1.setTitle("Title 1");
         schedule1.setDescription("Description 1");
         schedule1.setAssignee("Assignee 1");
-        schedule1.setDate("2023-05-19");
         schedule1.setPassword("password");
 
         Schedule schedule2 = new Schedule();
@@ -101,14 +98,13 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
 
         // When
-        ResponseEntity<ScheduleResponseDto> response = scheduleService.getDetailSchedule(1L);
+        ScheduleResponseDto response = scheduleService.getDetailSchedule(1L);
 
         // Then
-        assertEquals("Title", response.getBody().getTitle());
-        assertEquals("Description", response.getBody().getDescription());
-        assertEquals("Assignee", response.getBody().getAssignee());
-        assertEquals("2023-05-19", response.getBody().getDate());
-        assertEquals("password", response.getBody().getPassword());
+        assertEquals("Title", response.getTitle());
+        assertEquals("Description", response.getDescription());
+        assertEquals("Assignee", response.getAssignee());
+        assertEquals("2023-05-19", response.getDate());
     }
 
     @Test
@@ -123,13 +119,15 @@ class ScheduleServiceTest {
         schedule.setDate("2023-05-19");
         schedule.setPassword("password");
 
+
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
 
         // When
-        ResponseEntity<String> response = scheduleService.deleteSchedule(1L);
+        String response = scheduleService.deleteSchedule(1L);
 
         // Then
-        assertEquals("success", response.getBody());
+        assertEquals("success", response);
+        verify(scheduleRepository, times(1)).delete(schedule);
     }
 
 
@@ -156,12 +154,13 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(existingSchedule));
 
         // When
-        ResponseEntity<ScheduleResponseDto> response = scheduleService.updateSchedule(1L, requestDto);
+        ScheduleResponseDto response = scheduleService.updateSchedule(1L, requestDto);
 
         // Then
-        assertEquals("New Title", response.getBody().getTitle());
-        assertEquals("New Description", response.getBody().getDescription());
-        assertEquals("New Assignee", response.getBody().getAssignee());
-        assertEquals("2023-05-20", response.getBody().getDate());
+        assertEquals("New Title", response.getTitle());
+        assertEquals("New Description", response.getDescription());
+        assertEquals("New Assignee", response.getAssignee());
+        assertEquals("2023-05-20", response.getDate());
+        verify(scheduleRepository, times(1)).save(existingSchedule);
     }
 }

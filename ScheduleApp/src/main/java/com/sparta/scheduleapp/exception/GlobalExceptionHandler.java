@@ -13,6 +13,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     // 비밀번호 유효성
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPasswordException(InvalidPasswordException ex) {
@@ -46,7 +47,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
+            String errorMessage = error.getDefaultMessage(); //여기가 DTO에서 설정한 에러 메시지 들어감
             errors.put(fieldName, errorMessage);
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errors);
