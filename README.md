@@ -11,7 +11,7 @@
 - Spring Boot
 - MySQL
 - JDBC: 초기 단계에서는 JDBC를 통해 MySQL 데이터베이스와의 상호작용을 구현했습니다.
-- JPA: 향후 JPA로 전환하여 데이터베이스 작업을 더욱 효율적으로 처리할 계획입니다.
+- JPA: 향후 JPA로 전환하여 데이터베이스 작업을 더욱 효율적으로 처리했습니다.
 - Mockito
 - Intellij CheckStyle 적용
 
