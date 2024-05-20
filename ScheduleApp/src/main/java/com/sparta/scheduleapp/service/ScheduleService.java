@@ -78,11 +78,8 @@ public class ScheduleService {
     @Transactional
     public ResponseEntity<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto requestDto) {
         try {
-            log.info("Update schedule request received for ID {}: {}", id, requestDto); // 로그 추가
-
             Schedule schedule = findSchedule(id);
             schedule.update(requestDto);
-           // Schedule updatedSchedule = scheduleRepository.save(schedule);
             return ResponseEntity.ok(new ScheduleResponseDto(schedule));
         } catch (Exception e) {
             log.error("Error updating schedule", e);
@@ -93,6 +90,6 @@ public class ScheduleService {
 
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 스케줄은 없습니다."));
+                new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND));
     }
 }
