@@ -76,6 +76,7 @@
 
 # ⚡️8. 사용된 기술 개념
 
+### [Test코드](https://github.com/dami0806/ScheduleManagement/wiki/TestCode#mockito%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
 ###  [Exception처리](https://github.com/dami0806/ScheduleManagement/wiki/Exception%EC%B2%98%EB%A6%AC#%EC%9A%94%EC%95%BD)
 ### [Swagger](https://github.com/dami0806/ScheduleManagement/wiki/Swagger#%EC%9C%A0%ED%9A%A8%EC%84%B1-%EA%B2%80%EC%82%AC%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
 ### [DTO와 엔터티 ResponseEntity](https://github.com/dami0806/ScheduleManagement/wiki/DTO%EC%99%80-%EC%97%94%ED%84%B0%ED%8B%B0----ResponseEntity#1-dto%EC%99%80-%EC%97%94%ED%84%B0%ED%8B%B0%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90)
