@@ -3,6 +3,7 @@ package com.sparta.scheduleapp.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -11,6 +12,7 @@ import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.entity.Schedule;
 import com.sparta.scheduleapp.exception.InvalidPasswordException;
 import com.sparta.scheduleapp.repository.ScheduleRepository;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,6 +36,103 @@ class ScheduleServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
+    @Test
+    @DisplayName("스케줄 저장 테스트")
+    void 스케줄저장(){
+    //given
+    ScheduleRequestDto requestDto = new ScheduleRequestDto();
+    requestDto.setTitle("Title");
+    requestDto.setDescription("Description");
+    requestDto.setAssignee("Assignee");
+    requestDto.setDate("2023-05-19");
+    requestDto.setPassword("password");
+
+    //when
+    ResponseEntity<ScheduleResponseDto> response =
+            scheduleService.createSchedule(requestDto);
+
+    //then
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    assertEquals("Title", response.getBody().getTitle());
+    assertEquals("Description", response.getBody().getDescription());
+    assertEquals("Assignee", response.getBody().getAssignee());
+    assertEquals("2023-05-19", response.getBody().getDate());
+    assertEquals("password", response.getBody().getPassword());
+}
+
+
+    @Test
+    @DisplayName("스케줄 모두불러오기 테스트")
+    void testGetAllSchedules() {
+        // Given
+        Schedule schedule1 = new Schedule();
+        schedule1.setId(1L);
+        schedule1.setTitle("Title 1");
+        schedule1.setDescription("Description 1");
+        schedule1.setAssignee("Assignee 1");
+        schedule1.setDate("2023-05-19");
+        schedule1.setPassword("password");
+
+        Schedule schedule2 = new Schedule();
+        schedule2.setId(2L);
+        schedule2.setTitle("Title 2");
+        schedule2.setDescription("Description 2");
+        schedule2.setAssignee("Assignee 2");
+        schedule2.setDate("2023-05-20");
+        schedule2.setPassword("password");
+
+        List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
+        when(scheduleRepository.findAll()).thenReturn(schedules);
+    }
+
+    @Test
+    @DisplayName("스케줄 상세보기 테스트")
+    void testGetDetailSchedule() {
+        // Given
+        Schedule schedule = new Schedule();
+        schedule.setId(1L);
+        schedule.setTitle("Title");
+        schedule.setDescription("Description");
+        schedule.setAssignee("Assignee");
+        schedule.setDate("2023-05-19");
+        schedule.setPassword("password");
+
+        when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
+
+        // When
+        ResponseEntity<ScheduleResponseDto> response = scheduleService.getDetailSchedule(1L);
+
+        // Then
+        assertEquals("Title", response.getBody().getTitle());
+        assertEquals("Description", response.getBody().getDescription());
+        assertEquals("Assignee", response.getBody().getAssignee());
+        assertEquals("2023-05-19", response.getBody().getDate());
+        assertEquals("password", response.getBody().getPassword());
+    }
+
+    @Test
+    @DisplayName("스케줄 삭제 테스트")
+    void testDeleteSchedule() {
+        // Given
+        Schedule schedule = new Schedule();
+        schedule.setId(1L);
+        schedule.setTitle("Title");
+        schedule.setDescription("Description");
+        schedule.setAssignee("Assignee");
+        schedule.setDate("2023-05-19");
+        schedule.setPassword("password");
+
+        when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
+
+        // When
+        ResponseEntity<String> response = scheduleService.deleteSchedule(1L);
+
+        // Then
+        assertEquals("success", response.getBody());
+    }
+
+
 
     @Test
     @DisplayName("스케줄 업데이트 테스트")

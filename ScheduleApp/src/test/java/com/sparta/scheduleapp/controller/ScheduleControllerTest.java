@@ -1,11 +1,16 @@
 package com.sparta.scheduleapp.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import com.sparta.scheduleapp.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.entity.Schedule;
 import com.sparta.scheduleapp.service.ScheduleService;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,16 +23,14 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Collections;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(ScheduleController.class)
-public class ScheduleControllerTest {
+class ScheduleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,132 +39,150 @@ public class ScheduleControllerTest {
     private ScheduleService scheduleService;
 
     @Autowired
-    private WebApplicationContext context;
+    private ObjectMapper objectMapper;
 
-    private Schedule schedule;
-    private ScheduleResponseDto responseDto;
     @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-
-        // 테스트용 스케줄 엔티티 객체 생성
-        schedule = new Schedule();
-        schedule.setId(1L);
-        schedule.setTitle("제목1");
-        schedule.setDescription("내용1");
-        schedule.setAssignee("test@naver.com");
-        schedule.setDate("2024-05-17");
-        schedule.setPassword("비번1");
-
-        // 테스트용 스케줄 응답 DTO 객체 생성
-        responseDto = new ScheduleResponseDto(schedule);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
-    // 스케줄 생성 테스트
     @Test
-    public void 스케줄생성() throws Exception {
+    @DisplayName("스케줄 추가 테스트")
+    void createSchedule() throws Exception {
+        // Given
+        ScheduleRequestDto requestDto = new ScheduleRequestDto();
+        requestDto.setTitle("Title");
+        requestDto.setDescription("Description");
+        requestDto.setAssignee("dami@naver.com");
+        requestDto.setDate("2023-05-19");
+        requestDto.setPassword("password");
 
-        // 테스트용 스케줄 엔티티 객체 생성
-        Schedule schedule = new Schedule();
-        schedule.setId(2L);
-        schedule.setTitle("Test");
-        schedule.setDescription("Test Description");
-        schedule.setAssignee("test@naver.com");
-        schedule.setDate("2024-05-17");
-        schedule.setPassword("password");
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
 
-        // 테스트용 스케줄 응답 DTO 객체 생성
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
+        responseDto.setTitle("Title");
+        responseDto.setDescription("Description");
+        responseDto.setAssignee("dami@naver.com");
+        responseDto.setDate("2023-05-19");
+        responseDto.setPassword("password");
 
-        when(scheduleService.createSchedule(any(ScheduleRequestDto.class)))
-                .thenReturn(ResponseEntity.status(201).body(responseDto));
+        when(scheduleService.createSchedule(any(ScheduleRequestDto.class))).thenReturn(ResponseEntity.status(201).body(responseDto));
 
+        // When & Then
         mockMvc.perform(post("/api/schedule")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"title\": \"Test\", \"description\": \"Test Description\", \"assignee\": \"test@naver.com\", \"password\": \"password\", \"date\": \"2024-05-17\" }"))
-                .andExpect(status().isCreated()) // HTTP 상태 코드 201(CREATED)인지 확인
-                .andExpect(jsonPath("$.title", is("Test"))); // 응답의 title이 "Test"인지 확인
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", is("Title")))
+                .andExpect(jsonPath("$.description", is("Description")))
+                .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
+                .andExpect(jsonPath("$.date", is("2023-05-19")))
+                .andExpect(jsonPath("$.password", is("password")));
     }
 
-
     @Test
-    void 스케줄리스트() throws Exception {
-        //given
+    @DisplayName("스케줄 목록 조회 테스트")
+    void getScheduleList() throws Exception {
+        // Given
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
+        responseDto.setTitle("Title");
+        responseDto.setDescription("Description");
+        responseDto.setAssignee("dami@naver.com");
+        responseDto.setDate("2023-05-19");
+        responseDto.setPassword("password");
 
-        //when
         when(scheduleService.getScheduleList()).thenReturn(Collections.singletonList(responseDto));
-        //then
-        mockMvc.perform(get("/api/schedule"))
-                .andExpect(status().isOk()) // HTTP 상태 코드 200(OK)인지 확인
-                .andExpect(jsonPath("$[0].title", is("제목1")));
+
+        // When & Then
+        mockMvc.perform(get("/api/schedule")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title", is("Title")))
+                .andExpect(jsonPath("$[0].description", is("Description")))
+                .andExpect(jsonPath("$[0].assignee", is("dami@naver.com")))
+                .andExpect(jsonPath("$[0].date", is("2023-05-19")))
+                .andExpect(jsonPath("$[0].password", is("password")));
     }
 
     @Test
-    void 스케줄상세() throws Exception {
-        // 서비스의 getDetailSchedule 메서드가 호출되면 responseDto를 반환
-        //given
+    @DisplayName("스케줄 상세 조회 테스트")
+    void getDetailSchedule() throws Exception {
+        // Given
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
+        responseDto.setTitle("Title");
+        responseDto.setDescription("Description");
+        responseDto.setAssignee("dami@naver.com");
+        responseDto.setDate("2023-05-19");
+        responseDto.setPassword("password");
 
-        //when
-        when(scheduleService.getDetailSchedule(anyLong())).thenReturn(ResponseEntity.status(200).body(responseDto));
+        when(scheduleService.getDetailSchedule(anyLong())).thenReturn(ResponseEntity.ok(responseDto));
 
-        //then
-        mockMvc.perform(get("/api/schedule/1"))
-                .andExpect(status().isOk()) // HTTP 상태 코드 200(OK)인지 확인
-                .andExpect(jsonPath("$.title", is("제목1")));
+        // When & Then
+        mockMvc.perform(get("/api/schedule/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is("Title")))
+                .andExpect(jsonPath("$.description", is("Description")))
+                .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
+                .andExpect(jsonPath("$.date", is("2023-05-19")))
+                .andExpect(jsonPath("$.password", is("password")));
     }
 
     @Test
-    void 스케줄수정() throws Exception {
-        // 서비스의 updateSchedule 메서드가 호출되면 responseDto를 반환
-        //객체 만들어서 수정DTO생성
+    @DisplayName("스케줄 수정 테스트")
+    void updateSchedule() throws Exception {
+        // Given
+        ScheduleRequestDto requestDto = new ScheduleRequestDto();
+        requestDto.setTitle("Updated Title");
+        requestDto.setDescription("Updated Description");
+        requestDto.setAssignee("dami@naver.com");
+        requestDto.setDate("2023-05-20");
+        requestDto.setPassword("updatedpassword");
 
-        //given
-        // 수정된 스케줄 응답 DTO 객체 생성
-        Schedule updatedSchedule = new Schedule();
-        updatedSchedule.setId(1L);
-        updatedSchedule.setTitle("수정제목");
-        updatedSchedule.setDescription("수정본문");
-        updatedSchedule.setAssignee("test@naver.com");
-        updatedSchedule.setDate("2024-05-17");
-        updatedSchedule.setPassword("수정번호");
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
+        responseDto.setTitle("Updated Title");
+        responseDto.setDescription("Updated Description");
+        responseDto.setAssignee("dami@naver.com");
+        responseDto.setDate("2023-05-20");
+        responseDto.setPassword("updatedpassword");
 
-        //when
-        ScheduleResponseDto updatedResponseDto = new ScheduleResponseDto(updatedSchedule);
+        when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class))).thenReturn(ResponseEntity.ok(responseDto));
 
-        //then
-        // 서비스의 updateSchedule 메서드가 호출되면 updatedResponseDto를 반환
-        when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class)))
-                .thenReturn(ResponseEntity.status(200).body(updatedResponseDto));
-
-        // 스케줄 수정 API 호출 및 검증
-        mockMvc.perform(put("/api/schedule/1")
+        // When & Then
+        mockMvc.perform(put("/api/schedule/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"title\": \"수정제목\", \"description\": \"수정본문\", \"assignee\": \"test@naver.com\", \"password\": \"수정번호\", \"date\": \"2024-05-17\" }"))
-                .andExpect(status().isOk()) // HTTP 상태 코드 200(OK)인지 확인
-                .andExpect(jsonPath("$.title", is("수정제목")));
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is("Updated Title")))
+                .andExpect(jsonPath("$.description", is("Updated Description")))
+                .andExpect(jsonPath("$.assignee", is("dami@naver.com")))
+                .andExpect(jsonPath("$.date", is("2023-05-20")))
+                .andExpect(jsonPath("$.password", is("updatedpassword")));
     }
 
     @Test
-    void 스케줄삭제() throws Exception {
-        // 서비스의 deleteSchedule 메서드가 호출되면 성공 메시지를 반환
-        //when
-        when(scheduleService.deleteSchedule(anyLong()))
-                .thenReturn(ResponseEntity.ok("success"));
+    @DisplayName("스케줄 삭제 테스트")
+    void deleteSchedule() throws Exception {
+        // Given
+        when(scheduleService.deleteSchedule(anyLong())).thenReturn(ResponseEntity.ok("success"));
 
-        mockMvc.perform(delete("/api/schedule/1"))
-                .andExpect(status().isOk());
+        // When & Then
+        mockMvc.perform(delete("/api/schedule/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"));
     }
 
     @Test
+    @DisplayName("비밀번호 검증 테스트")
     void verifyPassword() throws Exception {
-        // 서비스의 verifyPassword 메서드가 호출되면 true를 반환
-        when(scheduleService.verifyPassword(anyLong(), any(String.class)))
-                .thenReturn(ResponseEntity.ok(true));
+        // Given
+        when(scheduleService.verifyPassword(anyLong(), anyString())).thenReturn(ResponseEntity.ok(true));
 
-        mockMvc.perform(post("/api/schedule/validatePassword/1")
+        // When & Then
+        mockMvc.perform(post("/api/schedule/validatePassword/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"password\": \"비번1\" }"))
-                .andExpect(status().isOk()) // HTTP 상태 코드 200(OK)인지 확인
-                .andExpect(jsonPath("$", is(true))); // 응답이 true인지 확인
+                        .content("{\"password\":\"password\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 }
