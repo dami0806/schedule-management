@@ -50,15 +50,8 @@ public class ScheduleService {
     }
 
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(Long id) {
-        List<Schedule> schedules = scheduleRepository.findAll();
-
-        for (Schedule schedule : schedules) {
-            if (schedule.getId() == id) {
-                return ResponseEntity.ok(new ScheduleResponseDto(schedule));
-            }
-        }
-        throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
-
+            Schedule schedule = findSchedule(id);
+            return ResponseEntity.ok(new ScheduleResponseDto(schedule));
     }
 
 

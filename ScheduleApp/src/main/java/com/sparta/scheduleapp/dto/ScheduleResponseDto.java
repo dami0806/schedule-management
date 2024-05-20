@@ -2,8 +2,12 @@ package com.sparta.scheduleapp.dto;
 
 import lombok.Getter;
 import com.sparta.scheduleapp.entity.Schedule;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class ScheduleResponseDto {
     private Long id;
     private String title;
