@@ -72,7 +72,8 @@
 |  **프로젝트 스크린샷**  |   |
 | 할일추가 <br> - 전체일정 <br> - 세부사항 <br> - 수정 & 삭제 시 <br>  비밀번호 유효성검사 | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/f2dbf2ca-df7e-48a1-a8d1-38f5ce490bdf" > <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/feae617c-4fd8-423b-b955-870506637133">  <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/9e473814-f11c-4c18-9924-b14f5b9e2d50">  <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/07781081-dab7-428c-bde8-82becd37c624">||
 | **Swagger** | <img width="500" alt="프로젝트 스크린샷" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/f7afa26a-b058-4653-bb4e-5b9bffe87145"> |
-| Jacoco  | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/37584e7d-241a-464a-84ff-bbdec5b546d8"> <br> - 정상처리만 테스트해서 코드 커버리지낮음|
+| Jacoco  | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/4b6847a2-91f7-473f-9c44-91b61c38aaa9">
+ <br> - 정상처리만 테스트해서 코드 커버리지낮음|
 
 # ⚡️8. 사용된 기술 개념
 
