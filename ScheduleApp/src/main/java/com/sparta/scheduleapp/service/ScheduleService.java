@@ -3,7 +3,6 @@ package com.sparta.scheduleapp.service;
 import com.sparta.scheduleapp.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.exception.InvalidPasswordException;
-import com.sparta.scheduleapp.exception.ScheduleAlreadyDeletedException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
 import jakarta.transaction.Transactional;
@@ -27,18 +26,23 @@ public class ScheduleService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleRepository scheduleRepository;
 
-    public ResponseEntity<ScheduleResponseDto> createSchedule(ScheduleRequestDto requestDto) {
-        try {
-            log.info("Received schedule: {}", requestDto);
-            Schedule schedule = new Schedule(requestDto);
-            Schedule savedSchedule = scheduleRepository.save(schedule);
+    // Entity -> Dto 여기서 스케줄에 dto넣기
+    //그럼 여기서 ScheduleResponseDto로 넘기고
+    //public ResponseEntity<ScheduleResponseDto> createSchedule(ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+            //Dto -> Entity 넣고 저장
+            Schedule schedule = new Schedule();
+            schedule.setTitle(requestDto.getTitle());
+            schedule.setDescription(requestDto.getDescription());
+            schedule.setAssignee(requestDto.getAssignee());
+            schedule.setDate(requestDto.getDate());
+            schedule.setPassword(requestDto.getPassword());
 
+            scheduleRepository.save(schedule);
+
+            //Entity -> Dto  ResponseEntity로 반환
             ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-        } catch (Exception e) {
-            log.error("Error creating schedule", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+            return responseDto;
     }
 
     public List<ScheduleResponseDto> getScheduleList() {
@@ -49,41 +53,46 @@ public class ScheduleService {
 
     }
 
-    public ResponseEntity<ScheduleResponseDto> getDetailSchedule(Long id) {
+    //public ResponseEntity<ScheduleResponseDto> getDetailSchedule(Long id) {
+    public ScheduleResponseDto getDetailSchedule(Long id) {
+
             Schedule schedule = findSchedule(id);
-            return ResponseEntity.ok(new ScheduleResponseDto(schedule));
+            return new ScheduleResponseDto(schedule);
     }
 
 
     // Schedule 객체를 반환하는 헬퍼 메서드
 
-    public ResponseEntity<Boolean> verifyPassword(Long id, String password) {
+    public boolean verifyPassword(Long id, String password) {
         Schedule schedule = findSchedule(id);
         if (schedule.getPassword().equals(password)) {
-            return ResponseEntity.ok(true);
+            return true;
         } else {
             throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);
         }
     }
 
-    public ResponseEntity<String> deleteSchedule(Long id) {
+    //public ResponseEntity<String> deleteSchedule(Long id) {
+    public String deleteSchedule(Long id) {
         Schedule schedule = findSchedule(id);
 
         scheduleRepository.delete(schedule);
-        return ResponseEntity.ok("success");
+        return "success";
 
     }
 
     @Transactional
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto requestDto) {
-        try {
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+
             Schedule schedule = findSchedule(id);
-            schedule.update(requestDto);
-            return ResponseEntity.ok(new ScheduleResponseDto(schedule));
-        } catch (Exception e) {
-            log.error("Error updating schedule", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+            schedule.setTitle(requestDto.getTitle());
+            schedule.setDescription(requestDto.getDescription());
+            schedule.setAssignee(requestDto.getAssignee());
+            schedule.setDate(requestDto.getDate());
+            scheduleRepository.save(schedule);
+
+           // schedule.update(requestDto);
+            return new ScheduleResponseDto(schedule);
     }
 
 

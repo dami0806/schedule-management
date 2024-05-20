@@ -30,5 +30,23 @@ public class Schedule {
     private String password;
     @Column(name = "isDeleted")
     private boolean isDeleted = false;
-    
+
+    /*
+    서비스로 보내기 ScheduleService
+    ->  DTO를 엔티티사이 변환하는 로직
+        public Schedule(ScheduleRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.description = requestDto.getDescription();
+        this.assignee = requestDto.getAssignee();
+        this.date = requestDto.getDate();
+        this.password = requestDto.getPassword();
+    }
+
+    public void update(ScheduleRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.description = requestDto.getDescription();
+        this.assignee = requestDto.getAssignee();
+        this.date = requestDto.getDate();
+    }
+     */
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
+
 @NoArgsConstructor
 public class ScheduleResponseDto {
     private Long id;
@@ -14,7 +14,6 @@ public class ScheduleResponseDto {
     private String description;
     private String assignee;
     private String date;
-    private String password;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -22,6 +21,5 @@ public class ScheduleResponseDto {
         this.description = schedule.getDescription();
         this.assignee = schedule.getAssignee();
         this.date = schedule.getDate();
-        this.password = schedule.getPassword();
     }
 }

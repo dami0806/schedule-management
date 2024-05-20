@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,8 @@ public class ScheduleController {
     @PostMapping("/schedules")
     @Operation(summary = "스케줄 추가", description = "새로운 스케줄을 추가합니다.")
     public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
-       return scheduleService.createSchedule(requestDto);
+        //여기서 ScheduleResponseDto .... = service(dto)받고
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(requestDto));
     }
 
     @GetMapping("/schedules")
@@ -43,24 +45,29 @@ public class ScheduleController {
     @GetMapping("/schedules/{id}")
     @Operation(summary = "스케줄 상세 조회", description = "특정 스케줄의 상세 정보를 조회합니다.")
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(@PathVariable Long id) {
-     return scheduleService.getDetailSchedule(id);
+     //return scheduleService.getDetailSchedule(id);
+        return ResponseEntity.ok(scheduleService.getDetailSchedule(id));
     }
 
     @PutMapping("/schedules/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
-      return scheduleService.updateSchedule(id, requestDto);
+     // return scheduleService.updateSchedule(id, requestDto);
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
     }
 
     @DeleteMapping("/schedules/{id}")
     @Operation(summary = "스케줄 삭제", description = "특정 스케줄을 삭제합니다.")
     public ResponseEntity<String> deleteSchedule(@PathVariable Long id) {
-       return scheduleService.deleteSchedule(id);
+
+        //return scheduleService.deleteSchedule(id);
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id));
     }
 
     @PostMapping("/schedules/validatePassword/{id}")
     @Operation(summary = "비밀번호 검증", description = "특정 스케줄의 비밀번호를 검증합니다.")
     public ResponseEntity<Boolean> verifyPassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-       return scheduleService.verifyPassword(id, requestBody.get("password"));
+       //return scheduleService.verifyPassword(id, requestBody.get("password"));
+        return ResponseEntity.ok(scheduleService.verifyPassword(id, requestBody.get("password")));
     }
 }
