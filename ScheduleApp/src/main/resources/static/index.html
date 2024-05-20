@@ -213,13 +213,22 @@
         let description = $('#edit-description').val();
         let assignee = $('#edit-assignee').val();
         let date = $('#edit-date').val();
+        let password = prompt("비밀번호를 입력하세요:"); // 비밀번호를 여기서 입력받음
+
+        if (!password) {
+            alert('비밀번호가 필요합니다.');
+            return;
+        }
 
         let scheduleData = {
             title: title,
             description: description,
             assignee: assignee,
-            date: date
+            date: date,
+            password: password 
         };
+
+        console.log("전송할 데이터:", scheduleData);
 
         $.ajax({
             type: "PUT",

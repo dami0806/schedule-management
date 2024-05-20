@@ -6,6 +6,7 @@ import com.sparta.scheduleapp.exception.InvalidPasswordException;
 import com.sparta.scheduleapp.exception.ScheduleAlreadyDeletedException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -40,61 +42,64 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDto> getScheduleList() {
-        return scheduleRepository.findAll();
+        List<Schedule> schedules = scheduleRepository.findAll();
+        return schedules.stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(Long id) {
-        Schedule schedule = scheduleRepository.findById(id);
+        List<Schedule> schedules = scheduleRepository.findAll();
 
-        if (schedule == null) {
-            log.error("스케줄을 찾을 수 없음, id: {}", id);
-            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
-        } else if (schedule.isDeleted()) {
-            throw new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED);
+        for (Schedule schedule : schedules) {
+            if (schedule.getId() == id) {
+                return ResponseEntity.ok(new ScheduleResponseDto(schedule));
+            }
         }
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-        return ResponseEntity.ok(responseDto);
+        throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
+
     }
+
 
     // Schedule 객체를 반환하는 헬퍼 메서드
 
 
     public ResponseEntity<Boolean> verifyPassword(Long id, String password) {
-        Schedule schedule = scheduleRepository.findById(id);
-
-        if (schedule == null) {
-            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
-        }
-
-        if (!schedule.getPassword().equals(password)) {
+        Schedule schedule = findSchedule(id);
+        if (schedule.getPassword().equals(password)) {
+            return ResponseEntity.ok(true);
+        } else {
             throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);
         }
-        return ResponseEntity.ok(true);
     }
 
     public ResponseEntity<String> deleteSchedule(Long id) {
-        Schedule schedule = scheduleRepository.findById(id);
-        if (schedule != null) {
-            if (schedule.isDeleted()) {
-                throw new ScheduleAlreadyDeletedException(ErrorMessage.SCHEDULE_ALREADY_DELETED);
-            }
-            scheduleRepository.delete(id);
-            schedule.setDeleted(true);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
-        } else {
-            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
+        Schedule schedule = findSchedule(id);
+
+        scheduleRepository.delete(schedule);
+        return ResponseEntity.ok("success");
+
+    }
+
+    @Transactional
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto requestDto) {
+        try {
+            log.info("Update schedule request received for ID {}: {}", id, requestDto); // 로그 추가
+
+            Schedule schedule = findSchedule(id);
+            schedule.update(requestDto);
+           // Schedule updatedSchedule = scheduleRepository.save(schedule);
+            return ResponseEntity.ok(new ScheduleResponseDto(schedule));
+        } catch (Exception e) {
+            log.error("Error updating schedule", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(Long id, ScheduleRequestDto requestDto) {
-        Schedule schedule = scheduleRepository.findById(id);
-        if (schedule != null) {
-            scheduleRepository.update(id, requestDto);
 
-            schedule.update(requestDto);
-            return ResponseEntity.status(HttpStatus.OK).body(new ScheduleResponseDto(schedule));
-        } else {
-            throw new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND);
-        }
+    private Schedule findSchedule(Long id) {
+        return scheduleRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 스케줄은 없습니다."));
     }
 }
