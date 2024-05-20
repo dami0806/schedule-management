@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class ScheduleRequestDto {
     @Schema(description = "할일 제목", example = "제목은 필수입니다", required = true)

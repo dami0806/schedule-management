@@ -73,9 +73,8 @@ class ScheduleControllerTest {
         responseDto.setDescription("Description");
         responseDto.setAssignee("dami@naver.com");
         responseDto.setDate("2023-05-19");
-        responseDto.setPassword("password");
 
-        when(scheduleService.createSchedule(any(ScheduleRequestDto.class))).thenReturn(ResponseEntity.status(201).body(responseDto));
+        when(scheduleService.createSchedule(any(ScheduleRequestDto.class))).thenReturn(responseDto);
 
         // When & Then
         mockMvc.perform(post("/api/schedule")
@@ -221,7 +220,6 @@ class ScheduleControllerTest {
         responseDto.setDescription("Description");
         responseDto.setAssignee("dami@naver.com");
         responseDto.setDate("2023-05-19");
-        responseDto.setPassword("password");
 
         when(scheduleService.getScheduleList()).thenReturn(Collections.singletonList(responseDto));
 
@@ -245,9 +243,8 @@ class ScheduleControllerTest {
         responseDto.setDescription("Description");
         responseDto.setAssignee("dami@naver.com");
         responseDto.setDate("2023-05-19");
-        responseDto.setPassword("password");
 
-        when(scheduleService.getDetailSchedule(anyLong())).thenReturn(ResponseEntity.ok(responseDto));
+        when(scheduleService.getDetailSchedule(anyLong())).thenReturn(responseDto);
 
         // When & Then
         mockMvc.perform(get("/api/schedule/{id}", 1L)
@@ -276,9 +273,8 @@ class ScheduleControllerTest {
         responseDto.setDescription("Updated Description");
         responseDto.setAssignee("dami@naver.com");
         responseDto.setDate("2023-05-20");
-        responseDto.setPassword("updatedpassword");
 
-        when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class))).thenReturn(ResponseEntity.ok(responseDto));
+        when(scheduleService.updateSchedule(anyLong(), any(ScheduleRequestDto.class))).thenReturn(responseDto);
 
         // When & Then
         mockMvc.perform(put("/api/schedule/{id}", 1L)
@@ -341,7 +337,7 @@ class ScheduleControllerTest {
     @DisplayName("스케줄 삭제 테스트 -성공")
     void 스케줄삭제성공() throws Exception {
         // Given
-        when(scheduleService.deleteSchedule(anyLong())).thenReturn(ResponseEntity.ok("success"));
+        when(scheduleService.deleteSchedule(anyLong())).thenReturn("success");
 
         // When & Then
         mockMvc.perform(delete("/api/schedule/{id}", 1L)
@@ -384,7 +380,7 @@ class ScheduleControllerTest {
     @DisplayName("비밀번호 검증 테스트")
     void verifyPassword() throws Exception {
         // Given
-        when(scheduleService.verifyPassword(anyLong(), anyString())).thenReturn(ResponseEntity.ok(true));
+        when(scheduleService.verifyPassword(anyLong(), anyString())).thenReturn(true);
 
         // When & Then
         mockMvc.perform(post("/api/schedule/validatePassword/{id}", 1L)
