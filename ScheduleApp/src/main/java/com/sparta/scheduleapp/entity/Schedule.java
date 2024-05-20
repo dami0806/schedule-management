@@ -31,6 +31,7 @@ public class Schedule {
     @Column(name = "isDeleted")
     private boolean isDeleted = false;
 
+
     public Schedule(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.description = requestDto.getDescription();

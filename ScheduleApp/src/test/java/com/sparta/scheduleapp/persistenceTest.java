@@ -29,7 +29,6 @@ public class persistenceTest {
 
         try {
             Schedule schedule = new Schedule();
-            schedule.setId(1L);
             schedule.setTitle("타이틀");
             schedule.setDescription("영속성 컨텍스트와 트랜잭션 이해하기");
             schedule.setAssignee("dami@example.com");
@@ -104,7 +103,6 @@ public class persistenceTest {
 
         try {
             Schedule schedule3 = new Schedule();
-            schedule3.setId(2L);
             schedule3.setTitle("슬라이드");
             schedule3.setDescription("영속성 컨텍스트와 트랜잭션 이해하기");
             schedule3.setAssignee("dami@example.com");
@@ -167,7 +165,6 @@ public class persistenceTest {
 
         try {
             Schedule schedule = new Schedule();
-            schedule.setId(2L);
             schedule.setTitle("타이틀");
             schedule.setDescription("쓰기 지연 저장소");
             schedule.setAssignee("dami@example.com");
@@ -176,7 +173,6 @@ public class persistenceTest {
             em.persist(schedule);
 
             Schedule schedule2 = new Schedule();
-            schedule2.setId(3L);
             schedule2.setTitle("타이틀2");
             schedule2.setDescription("과연 저장을 잘 하고 있을까?");
             schedule2.setAssignee("dami@example.com");
@@ -184,6 +180,77 @@ public class persistenceTest {
             schedule2.setPassword("비밀");
             em.persist(schedule2);
 
+
+            System.out.println("트랜잭션 commit 전");
+            et.commit();
+            System.out.println("트랜잭션 commit 후");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            et.rollback();
+        } finally {
+            em.close();
+        }
+
+        emf.close();
+    }
+    @Test
+    @DisplayName("flush() 메서드 확인")
+    void test7() {
+        EntityTransaction et = em.getTransaction();
+
+        et.begin();
+
+        try {
+            Schedule schedule = new Schedule();
+            schedule.setTitle("타이틀4");
+            schedule.setDescription("쓰기 지연 저장소4");
+            schedule.setAssignee("dami@example.com");
+            schedule.setDate("2024-06-01");
+            schedule.setPassword("비밀4");
+            em.persist(schedule);
+
+            System.out.println("flush() 전");
+            em.flush(); // flush() 직접 호출
+            System.out.println("flush() 후\n");
+
+
+            System.out.println("트랜잭션 commit 전");
+            et.commit();
+            System.out.println("트랜잭션 commit 후");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            et.rollback();
+        } finally {
+            em.close();
+        }
+
+        emf.close();
+    }
+    @Test
+    @DisplayName("변경 감지 확인")
+    void test8() {
+        EntityTransaction et = em.getTransaction();
+
+        et.begin();
+
+        try {
+            System.out.println("변경할 데이터를 조회합니다.");
+            Schedule schedule = new Schedule();
+            schedule.setTitle("타이틀4");
+            schedule.setDescription("쓰기 지연 저장소4");
+            schedule.setAssignee("dami@example.com");
+            schedule.setDate("2024-06-01");
+            schedule.setPassword("비밀4");
+
+            System.out.println("schedule.getId() = " + schedule.getId());
+            System.out.println("schedule.getTitle() = " + schedule.getTitle());
+            System.out.println("schedule.getDescription() = " + schedule.getDescription());
+
+            System.out.println("\n수정을 진행합니다.");
+            schedule.setTitle("Update");
+            schedule.setDescription("변경 감지 확인");
 
             System.out.println("트랜잭션 commit 전");
             et.commit();
