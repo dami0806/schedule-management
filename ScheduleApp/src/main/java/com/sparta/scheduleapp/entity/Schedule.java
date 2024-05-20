@@ -30,20 +30,5 @@ public class Schedule {
     private String password;
     @Column(name = "isDeleted")
     private boolean isDeleted = false;
-
-
-    public Schedule(ScheduleRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.description = requestDto.getDescription();
-        this.assignee = requestDto.getAssignee();
-        this.date = requestDto.getDate();
-        this.password = requestDto.getPassword();
-    }
-
-    public void update(ScheduleRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.description = requestDto.getDescription();
-        this.assignee = requestDto.getAssignee();
-        this.date = requestDto.getDate();
-    }
+    
 }

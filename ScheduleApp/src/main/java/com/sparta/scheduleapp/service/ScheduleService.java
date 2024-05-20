@@ -57,7 +57,6 @@ public class ScheduleService {
 
     // Schedule 객체를 반환하는 헬퍼 메서드
 
-
     public ResponseEntity<Boolean> verifyPassword(Long id, String password) {
         Schedule schedule = findSchedule(id);
         if (schedule.getPassword().equals(password)) {
