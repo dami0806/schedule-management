@@ -16,7 +16,7 @@
                     Log into Schedule
                 </div>
                 <div class="card-body">
-                    <form action="/api/user/login" method="post">
+                    <form action="/api/auth/login" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">아이디</label>
                             <input type="text" name="username" id="username" class="form-control" required>
@@ -30,7 +30,7 @@
                         </div>
                     </form>
                     <div class="text-center mt-3">
-                        <button class="btn btn-secondary" onclick="location.href='/api/user/signup'">회원 가입하기</button>
+                        <button class="btn btn-secondary" onclick="location.href='/api/auth/signup'">회원 가입하기</button>
                     </div>
                     <div id="login-failed" class="alert alert-danger mt-3" role="alert" style="display: none;">
                         로그인에 실패하였습니다.
