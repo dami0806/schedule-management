@@ -1,49 +1,48 @@
 package com.sparta.scheduleapp.entity;
 
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.comment.entity.Comment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
-
 @Table(name = "schedule")
 public class Schedule {
-    //엔티티 -> 데이터베이스에 넘길것
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false, length = 200)
+    @Column(nullable = false, length = 200)
     private String title;
-    @Column(name = "description", nullable = false, length = 200)
+
+    @Column(nullable = false, length = 200)
     private String description;
-    @Column(name = "assignee", nullable = false, length = 100)
+
+    @Column(nullable = false, length = 100)
     private String assignee;
-    @Column(name = "date", nullable = false, length = 200)
+
+    @Column(nullable = false, length = 200)
     private String date;
-    @Column(name = "password", nullable = false, length = 200)
+
+    @Column(nullable = false, length = 200)
     private String password;
-    @Column(name = "isDeleted")
+
+    @Column(nullable = false)
     private boolean isDeleted = false;
 
-    /*
-    서비스로 보내기 ScheduleService
-    ->  DTO를 엔티티사이 변환하는 로직
-        public Schedule(ScheduleRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.description = requestDto.getDescription();
-        this.assignee = requestDto.getAssignee();
-        this.date = requestDto.getDate();
-        this.password = requestDto.getPassword();
+    public Schedule(String title, String description, String assignee, String date, String password) {
+        this.title = title;
+        this.description = description;
+        this.assignee = assignee;
+        this.date = date;
+        this.password = password;
     }
-     */
 
     public void update(String title, String description, String assignee, String date, String password) {
         this.title = title;
@@ -52,5 +51,4 @@ public class Schedule {
         this.date = date;
         this.password = password;
     }
-
 }

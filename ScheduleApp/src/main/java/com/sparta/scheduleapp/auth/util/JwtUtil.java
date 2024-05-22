@@ -17,14 +17,13 @@ public class JwtUtil {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-
     @Value("${jwt.token.expiration}")
     private long tokenExpiration;
 
     @Value("${jwt.refresh.token.expiration}")
     private long refreshTokenExpiration;
 
-    //엑세스 토큰 만료 기간
+    // 액세스 토큰 생성
     public String createToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -34,7 +33,7 @@ public class JwtUtil {
                 .compact();
     }
 
-  // 리프레시 토큰 기간
+    // 리프레시 토큰 생성
     public String createRefreshToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -59,22 +58,17 @@ public class JwtUtil {
             return false;
         }
     }
+
     public boolean validateRefreshToken(String token) {
-        try {
-            extractClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return validateToken(token);
     }
 
     public String refreshToken(String refreshToken) {
-        if (validateRefreshToken(refreshToken)) {
-            String username = extractClaims(refreshToken).getSubject();
-            return createToken(username);
-        } else {
-            throw new IllegalArgumentException("refresh token이 없거나 만료");
-        }
+        String username = getUsernameFromToken(refreshToken);
+        return createToken(username);
     }
 
+    public String getUsernameFromToken(String token) {
+        return extractClaims(token).getSubject();
+    }
 }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Component
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -26,27 +25,17 @@ public class ScheduleService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleRepository scheduleRepository;
 
-    // Entity -> Dto 여기서 스케줄에 dto넣기
-    //그럼 여기서 ScheduleResponseDto로 넘기고
-    //public ResponseEntity<ScheduleResponseDto> createSchedule(ScheduleRequestDto requestDto) {
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-            //Dto -> Entity 넣고 저장
-            Schedule schedule = new Schedule(
-                    1L,
-                    requestDto.getTitle(),
-                    requestDto.getDescription(),
-                    requestDto.getAssignee(),
-                    requestDto.getDate(),
-                    requestDto.getPassword(),
-                    false
-            );
+        Schedule schedule = new Schedule(
+                requestDto.getTitle(),
+                requestDto.getDescription(),
+                requestDto.getAssignee(),
+                requestDto.getDate(),
+                requestDto.getPassword()
+        );
 
-
-            scheduleRepository.save(schedule);
-
-            //Entity -> Dto  ResponseEntity로 반환
-            ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-            return responseDto;
+        scheduleRepository.save(schedule);
+        return new ScheduleResponseDto(schedule);
     }
 
     public List<ScheduleResponseDto> getScheduleList() {
@@ -54,18 +43,12 @@ public class ScheduleService {
         return schedules.stream()
                 .map(ScheduleResponseDto::new)
                 .collect(Collectors.toList());
-
     }
 
-    //public ResponseEntity<ScheduleResponseDto> getDetailSchedule(Long id) {
     public ScheduleResponseDto getDetailSchedule(Long id) {
-
-            Schedule schedule = findSchedule(id);
-            return new ScheduleResponseDto(schedule);
+        Schedule schedule = findSchedule(id);
+        return new ScheduleResponseDto(schedule);
     }
-
-
-    // Schedule 객체를 반환하는 헬퍼 메서드
 
     public boolean verifyPassword(Long id, String password) {
         Schedule schedule = findSchedule(id);
@@ -76,13 +59,10 @@ public class ScheduleService {
         }
     }
 
-    //public ResponseEntity<String> deleteSchedule(Long id) {
     public String deleteSchedule(Long id) {
         Schedule schedule = findSchedule(id);
-
         scheduleRepository.delete(schedule);
         return "success";
-
     }
 
     @Transactional
@@ -91,10 +71,7 @@ public class ScheduleService {
         schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());
         scheduleRepository.save(schedule);
         return new ScheduleResponseDto(schedule);
-
     }
-
-
 
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
