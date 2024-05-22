@@ -74,6 +74,11 @@
 | **Swagger** | <img width="500" alt="프로젝트 스크린샷" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/f7afa26a-b058-4653-bb4e-5b9bffe87145"> |
 | Jacoco  | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/4b6847a2-91f7-473f-9c44-91b61c38aaa9">|
 
+## 두번째
+| 작업 내용 | 사진 |
+|  **프로젝트 스크린샷**  |   |
+|-----------|------|
+| 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 
 # ⚡️8. 사용된 기술 개념
 
