@@ -16,7 +16,7 @@
                     Log into Schedule
                 </div>
                 <div class="card-body">
-                    <form action="/api/auth/login" method="post">
+                    <form id="login-form" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">아이디</label>
                             <input type="text" name="username" id="username" class="form-control" required>
@@ -42,6 +42,37 @@
 </div>
 
 <script>
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                window.location.href = '/';
+
+            })
+            .catch(error => {
+                const errorDiv = document.getElementById('login-failed');
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = '로그인에 실패하였습니다: ' + error.message;
+            });
+    });
+
     const href = location.href;
     const queryString = href.substring(href.indexOf("?") + 1);
     if (queryString === 'error') {

@@ -1,12 +1,15 @@
 package com.sparta.scheduleapp.auth.service;
 
 
+import com.sparta.scheduleapp.auth.dto.LoginRequestDto;
 import com.sparta.scheduleapp.auth.dto.SignupRequestDto;
 import com.sparta.scheduleapp.auth.entity.User;
 import com.sparta.scheduleapp.auth.entity.UserRoleEnum;
 import com.sparta.scheduleapp.auth.repository.UserRepository;
+import com.sparta.scheduleapp.auth.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -58,4 +64,18 @@ public class UserService {
         userRepository.save(user);
         logger.info("회원가입 성공: " + user.getUsername());
     }
+    public String login(LoginRequestDto loginRequestDto) {
+        User user = userRepository.findByUsername(loginRequestDto.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("이름과 비밀번호가 일치하지 않습니다."));
+
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        String token = jwtUtil.createToken(user.getUsername());
+        logger.info("로그인 성공: 사용자 {}, 토큰 {}", user.getUsername(), token);
+        return token;
+    }
+
+
 }
