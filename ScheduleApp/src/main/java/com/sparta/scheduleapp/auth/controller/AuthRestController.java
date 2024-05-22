@@ -1,6 +1,7 @@
 package com.sparta.scheduleapp.auth.controller;
 
 import com.sparta.scheduleapp.auth.dto.LoginRequestDto;
+import com.sparta.scheduleapp.auth.dto.SignupRequestDto;
 import com.sparta.scheduleapp.auth.dto.TokenResponseDto;
 import com.sparta.scheduleapp.auth.service.UserService;
 import com.sparta.scheduleapp.auth.util.JwtUtil;
@@ -19,6 +20,13 @@ public class AuthRestController {
     public AuthRestController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+    }
+
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
+        userService.signup(signupRequestDto);
+        return ResponseEntity.ok("회원가입 성공");
     }
 
     @PostMapping("/login")

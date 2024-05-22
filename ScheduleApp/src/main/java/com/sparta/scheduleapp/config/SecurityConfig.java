@@ -33,7 +33,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/", "/index.html", "/api/auth/**", "/api/schedules/**").permitAll() // 특정 경로 접근 허용(일정화면도 조회는 가능)
+                        .requestMatchers("/", "/index.html", "/login.html", "/signup.html", "/api/auth/**", "/api/schedules/**").permitAll() // 특정 경로 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
