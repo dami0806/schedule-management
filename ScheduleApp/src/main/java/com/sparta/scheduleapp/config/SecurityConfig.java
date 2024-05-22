@@ -30,10 +30,12 @@ public class SecurityConfig {
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
+        // 요청에 대한 권한 설정
+        http.authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/", "/index.html", "/login.html", "/signup.html", "/api/auth/**", "/api/schedules/**").permitAll() // 특정 경로 접근 허용
+//                        .requestMatchers("/api/schedules/**").authenticated() // 인증 필요
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 

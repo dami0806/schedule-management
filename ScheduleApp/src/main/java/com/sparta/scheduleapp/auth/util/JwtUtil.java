@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private String secretKey;
+    private final String secretKey;
 
     public JwtUtil(@Value("${jwt.secret.key}") String secretKey) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -50,6 +51,11 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractClaims(token).getSubject();
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
     public boolean validateToken(String token) {
         try {
             extractClaims(token);
@@ -64,8 +70,17 @@ public class JwtUtil {
     }
 
     public String refreshToken(String refreshToken) {
-        String username = getUsernameFromToken(refreshToken);
-        return createToken(username);
+        if (validateRefreshToken(refreshToken)) {
+            String username = getUsernameFromToken(refreshToken);
+            return createToken(username);
+        } else {
+            throw new IllegalArgumentException("Refresh token is invalid or expired");
+        }
+    }
+
+    private boolean isTokenExpired(String token) {
+        final Date expiration = extractClaims(token).getExpiration();
+        return expiration.before(new Date());
     }
 
     public String getUsernameFromToken(String token) {
