@@ -5,6 +5,7 @@ import com.sparta.scheduleapp.auth.dto.SignupRequestDto;
 import com.sparta.scheduleapp.auth.dto.TokenResponseDto;
 import com.sparta.scheduleapp.auth.service.UserService;
 import com.sparta.scheduleapp.auth.util.JwtUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,4 +38,17 @@ public class AuthRestController {
         TokenResponseDto tokenResponseDto = new TokenResponseDto(token, refreshToken);
         return ResponseEntity.ok(tokenResponseDto);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDto> refresh(@RequestBody String refreshToken) {
+
+        if (jwtUtil.validateRefreshToken(refreshToken)) {
+            String newAccessToken = jwtUtil.refreshToken(refreshToken);
+            TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, refreshToken);
+            return ResponseEntity.ok(tokenResponseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 이걸 받았을때 클라이언트에서 리다이렉트로 로그인 화면으로 보내야함
+        }
+    }
+
 }

@@ -59,4 +59,22 @@ public class JwtUtil {
             return false;
         }
     }
+    public boolean validateRefreshToken(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String refreshToken(String refreshToken) {
+        if (validateRefreshToken(refreshToken)) {
+            String username = extractClaims(refreshToken).getSubject();
+            return createToken(username);
+        } else {
+            throw new IllegalArgumentException("refresh token이 없거나 만료");
+        }
+    }
+
 }
