@@ -3,6 +3,8 @@ package com.sparta.scheduleapp.comment.controller;
 import com.sparta.scheduleapp.comment.dto.CommentRequestDto;
 import com.sparta.scheduleapp.comment.dto.CommentResponseDto;
 import com.sparta.scheduleapp.comment.service.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,12 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/schedules")
+@Tag(name = "CommentController", description = "댓글 API")
+
 public class CommentController {
     @Autowired
     private CommentService commentService;
 
     // 댓글 작성
     @PostMapping("{scheduleId}/comments")
+    @Operation(summary = "댓글 작성", description = "새로운 댓글을 추가합니다.")
     public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long scheduleId, @RequestBody CommentRequestDto requestDto,@AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
         return ResponseEntity.ok(commentService.addComment(scheduleId, requestDto, userId));
@@ -24,6 +29,7 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping("comments/{commentId}")
+    @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
         return ResponseEntity.ok(commentService.updateComment(commentId, requestDto, userId));
@@ -31,6 +37,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("comments/{commentId}")
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
         commentService.deleteComment(commentId, userId);
