@@ -43,14 +43,14 @@ public class UserService {
 
         }
 
-//        String password = requestDto.getPassword();
-//
-//        // password  최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)
-//        if(!requestDto.getPassword().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,15}$")) {
-//            throw new IllegalArgumentException("비밀번호은 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z)와 숫자(0~9)로 구성되어야 합니다.");
-//        }
+        String password = requestDto.getPassword();
+
+        // password  최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)
+        if(!requestDto.getPassword().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,15}$")) {
+            throw new IllegalArgumentException("비밀번호은 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z)와 숫자(0~9)로 구성되어야 합니다.");
+        }
         // 비밀번호 인코딩 암호화했다가 조건에서 풀라함
-        String password = passwordEncoder.encode(requestDto.getPassword());
+    //    String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -83,7 +83,11 @@ public class UserService {
         User user = userRepository.findByUsername(loginRequestDto.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("이름과 비밀번호가 일치하지 않습니다."));
 
-        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+//        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+//        }
+        // 평문끼리 비교
+        if (!loginRequestDto.getPassword().equals(user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
