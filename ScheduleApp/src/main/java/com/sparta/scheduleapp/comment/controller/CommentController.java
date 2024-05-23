@@ -23,8 +23,11 @@ public class CommentController {
     @PostMapping("{scheduleId}/comments")
     @Operation(summary = "댓글 작성", description = "새로운 댓글을 추가합니다.")
     public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long scheduleId, @RequestBody CommentRequestDto requestDto,@AuthenticationPrincipal UserDetails userDetails) {
+        // 인증된 사용자의 이름을 가져옴
         String userId = userDetails.getUsername();
-        return ResponseEntity.ok(commentService.addComment(scheduleId, requestDto, userId));
+        CommentResponseDto responseDto = new CommentResponseDto(commentService.addComment(scheduleId, requestDto.getContent(), userId));
+        // 생성된 댓글을 포함한 응답 반환
+        return ResponseEntity.ok(responseDto);
     }
 
     // 댓글 수정

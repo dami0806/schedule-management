@@ -6,6 +6,7 @@ import com.sparta.scheduleapp.comment.entity.Comment;
 import com.sparta.scheduleapp.comment.repository.CommentRepository;
 import com.sparta.scheduleapp.entity.Schedule;
 import com.sparta.scheduleapp.repository.ScheduleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,12 @@ public class CommentService {
     private ScheduleRepository scheduleRepository;
 
     // 댓글 추가
-    public CommentResponseDto addComment(Long scheduleId, CommentRequestDto requestDto, String userId) {
-        Optional<Schedule> scheduleOpt = scheduleRepository.findById(scheduleId);
-        if (scheduleOpt.isEmpty()) {
-            throw new IllegalArgumentException("일정을 찾을 수 없습니다.");
-        }
-
-        Schedule schedule = scheduleOpt.get();
-        Comment comment = new Comment(requestDto.getContent(), userId, schedule);
-        commentRepository.save(comment);
-
-        return new CommentResponseDto(comment.getId(), comment.getContent(), comment.getUserId(), comment.getCreatedAt());
+    @Transactional // 트랜잭션 관리
+    public Comment addComment(Long scheduleId, String content, String userId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new IllegalArgumentException("스케줄을 찾을 수 없습니다.")); // 스케줄 존재 여부 확인
+        Comment comment = new Comment(content, userId, schedule); // 새로운 댓글 객체 생성
+        return commentRepository.save(comment); // 댓글 저장
     }
 
     // 댓글 수정
@@ -49,7 +45,7 @@ public class CommentService {
         comment.updateContent(requestDto.getContent());
         commentRepository.save(comment);
 
-        return new CommentResponseDto(comment.getId(), comment.getContent(), comment.getUserId(), comment.getCreatedAt());
+        return new CommentResponseDto( comment.getId(), comment.getContent(), comment.getUserId(), comment.getCreatedAt());
     }
 
     // 댓글 삭제

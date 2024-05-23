@@ -36,6 +36,10 @@ public class Schedule {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true) // 스케줄과 연관된 모든 댓글을 즉시 로딩하고, 스케줄 삭제 시 연관된 댓글도 삭제
+    private List<Comment> comments;
+
+
     public Schedule(String title, String description, String assignee, String date, String password) {
         this.title = title;
         this.description = description;

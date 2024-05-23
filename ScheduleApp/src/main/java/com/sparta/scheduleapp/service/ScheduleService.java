@@ -44,7 +44,11 @@ public class ScheduleService {
                 .map(ScheduleResponseDto::new)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
+    public Schedule getSchedule(Long id) {
+        return scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("스케줄을 찾을 수 없습니다.")); // 스케줄 존재 여부 확인
+    }
     public ScheduleResponseDto getDetailSchedule(Long id) {
         Schedule schedule = findSchedule(id);
         return new ScheduleResponseDto(schedule);

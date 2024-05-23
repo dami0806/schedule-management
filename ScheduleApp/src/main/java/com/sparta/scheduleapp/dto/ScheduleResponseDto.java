@@ -1,6 +1,7 @@
 package com.sparta.scheduleapp.dto;
 
 
+import com.sparta.scheduleapp.comment.dto.CommentResponseDto;
 import com.sparta.scheduleapp.controller.ScheduleController;
 import com.sparta.scheduleapp.exception.InvalidPasswordException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
@@ -27,6 +28,7 @@ public class ScheduleResponseDto {
     private String description;
     private String assignee;
     private String date;
+    private List<CommentResponseDto> comments;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -34,5 +36,8 @@ public class ScheduleResponseDto {
         this.description = schedule.getDescription();
         this.assignee = schedule.getAssignee();
         this.date = schedule.getDate();
+        this.comments = schedule.getComments().stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
