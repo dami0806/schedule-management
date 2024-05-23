@@ -22,7 +22,7 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder; // 과제에 맞춰서 암호화 안썼는데 과제제출 후 다시 쓰고싶어서 남겨둠
 
     @Autowired
     private JwtUtil jwtUtil;
