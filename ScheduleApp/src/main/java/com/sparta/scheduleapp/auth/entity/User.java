@@ -3,7 +3,6 @@ package com.sparta.scheduleapp.auth.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails { // Spring Security의 UserDetails
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +31,7 @@ public class User implements UserDetails {
 
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> authorities = new HashSet<>();
+    private Set<GrantedAuthority> authorities;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -43,16 +42,17 @@ public class User implements UserDetails {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.authorities = Collections.singleton(role.name());
+        // 사용자 권한 정보 GrantedAuthority interface에 있는 role.name()을 사용해서 GrantedAuthority 이거를 필드에
+//        Set<GrantedAuthority> authorities = new HashSet<>();
+//        authorities.add(() -> role.name());
+//        this.authorities = authorities;
+        this.authorities = Collections.singleton((GrantedAuthority)() -> role.name());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (String authority : this.authorities) {
-            grantedAuthorities.add(() -> authority);
-        }
-        return grantedAuthorities;
+
+        return authorities;
     }
 
     @Override
@@ -73,8 +73,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
-    }
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
     }
 }
