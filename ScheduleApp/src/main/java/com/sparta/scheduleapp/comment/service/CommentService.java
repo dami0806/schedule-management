@@ -1,11 +1,10 @@
 package com.sparta.scheduleapp.comment.service;
 
 import com.sparta.scheduleapp.comment.dto.CommentRequestDto;
-import com.sparta.scheduleapp.comment.dto.CommentResponseDto;
 import com.sparta.scheduleapp.comment.entity.Comment;
 import com.sparta.scheduleapp.comment.repository.CommentRepository;
-import com.sparta.scheduleapp.entity.Schedule;
-import com.sparta.scheduleapp.repository.ScheduleRepository;
+import com.sparta.scheduleapp.schedule.entity.Schedule;
+import com.sparta.scheduleapp.schedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

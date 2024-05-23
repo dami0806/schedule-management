@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp.controller;
+package com.sparta.scheduleapp.schedule.controller;
 
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
 import com.sparta.scheduleapp.exception.FileTypeNotAllowedException;

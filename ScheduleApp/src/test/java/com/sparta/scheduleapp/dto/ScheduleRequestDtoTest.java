@@ -1,5 +1,6 @@
 package com.sparta.scheduleapp.dto;
 
+import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

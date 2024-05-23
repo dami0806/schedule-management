@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp.config;
+package com.sparta.scheduleapp.auth.config;
 
 import com.sparta.scheduleapp.auth.filter.JwtAuthenticationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

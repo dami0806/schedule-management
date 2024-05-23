@@ -1,23 +1,19 @@
-package com.sparta.scheduleapp.service;
+package com.sparta.scheduleapp.schedule.service;
 
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
-import com.sparta.scheduleapp.dto.ScheduleResponseDto;
+import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.exception.InvalidPasswordException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
+import com.sparta.scheduleapp.schedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sparta.scheduleapp.controller.ScheduleController;
-import com.sparta.scheduleapp.entity.Schedule;
-import com.sparta.scheduleapp.repository.ScheduleRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.sparta.scheduleapp.schedule.controller.ScheduleController;
+import com.sparta.scheduleapp.schedule.entity.Schedule;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

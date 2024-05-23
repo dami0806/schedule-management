@@ -1,8 +1,8 @@
-package com.sparta.scheduleapp.controller;
+package com.sparta.scheduleapp.schedule.controller;
 
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
-import com.sparta.scheduleapp.dto.ScheduleResponseDto;
-import com.sparta.scheduleapp.service.ScheduleService;
+import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.schedule.dto.ScheduleResponseDto;
+import com.sparta.scheduleapp.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

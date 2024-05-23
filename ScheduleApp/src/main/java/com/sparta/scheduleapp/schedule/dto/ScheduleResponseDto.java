@@ -1,19 +1,11 @@
-package com.sparta.scheduleapp.dto;
+package com.sparta.scheduleapp.schedule.dto;
 
 
 import com.sparta.scheduleapp.comment.dto.CommentResponseDto;
-import com.sparta.scheduleapp.controller.ScheduleController;
-import com.sparta.scheduleapp.exception.InvalidPasswordException;
-import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
-import com.sparta.scheduleapp.exception.message.ErrorMessage;
-import com.sparta.scheduleapp.repository.ScheduleRepository;
-import jakarta.transaction.Transactional;
 import lombok.Getter;
-import com.sparta.scheduleapp.entity.Schedule;
+import com.sparta.scheduleapp.schedule.entity.Schedule;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
