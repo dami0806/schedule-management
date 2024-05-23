@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -25,7 +26,7 @@ public class ScheduleService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleRepository scheduleRepository;
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+    public Schedule createSchedule(ScheduleRequestDto requestDto) {
         Schedule schedule = new Schedule(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
@@ -34,24 +35,21 @@ public class ScheduleService {
                 requestDto.getPassword()
         );
 
-        scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(schedule);
+        return scheduleRepository.save(schedule);
     }
 
-    public List<ScheduleResponseDto> getScheduleList() {
-        List<Schedule> schedules = scheduleRepository.findAll();
-        return schedules.stream()
-                .map(ScheduleResponseDto::new)
-                .collect(Collectors.toList());
+    public List<Schedule> getScheduleList() {
+        return scheduleRepository.findAll();
     }
+
     @Transactional
     public Schedule getSchedule(Long id) {
         return scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("스케줄을 찾을 수 없습니다.")); // 스케줄 존재 여부 확인
     }
-    public ScheduleResponseDto getDetailSchedule(Long id) {
-        Schedule schedule = findSchedule(id);
-        return new ScheduleResponseDto(schedule);
+
+    public Schedule getDetailSchedule(Long id) {
+        return findSchedule(id);
     }
 
     public boolean verifyPassword(Long id, String password) {
@@ -70,11 +68,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+    public Schedule updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findSchedule(id);
         schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());
-        scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(schedule);
+        return scheduleRepository.save(schedule);
     }
 
     private Schedule findSchedule(Long id) {

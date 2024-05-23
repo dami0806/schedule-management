@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -33,27 +34,29 @@ public class ScheduleController {
     @Operation(summary = "스케줄 추가", description = "새로운 스케줄을 추가합니다.")
     public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         //여기서 ScheduleResponseDto .... = service(dto)받고
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(requestDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ScheduleResponseDto(scheduleService.createSchedule(requestDto)));
     }
 
     @GetMapping("/schedules")
     @Operation(summary = "스케줄 목록 조회", description = "모든 스케줄 목록을 조회합니다.")
     public List<ScheduleResponseDto> getScheduleList() {
-        return scheduleService.getScheduleList();
+        return scheduleService.getScheduleList().stream()
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/schedules/{id}")
     @Operation(summary = "스케줄 상세 조회", description = "특정 스케줄의 상세 정보를 조회합니다.")
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(@PathVariable Long id) {
      //return scheduleService.getDetailSchedule(id);
-        return ResponseEntity.ok(scheduleService.getDetailSchedule(id));
+        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.getDetailSchedule(id)));
     }
 
     @PutMapping("/schedules/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
      // return scheduleService.updateSchedule(id, requestDto);
-        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
+        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.updateSchedule(id, requestDto)));
     }
 
     @DeleteMapping("/schedules/{id}")

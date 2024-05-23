@@ -31,7 +31,7 @@ public class CommentService {
     }
 
     // 댓글 수정
-    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, String userId) {
+    public Comment updateComment(Long commentId, CommentRequestDto requestDto, String userId) {
         Optional<Comment> commentOpt = commentRepository.findById(commentId);
         if (commentOpt.isEmpty()) {
             throw new IllegalArgumentException("댓글을 찾을 수 없습니다.");
@@ -43,9 +43,7 @@ public class CommentService {
         }
 
         comment.updateContent(requestDto.getContent());
-        commentRepository.save(comment);
-
-        return new CommentResponseDto( comment.getId(), comment.getContent(), comment.getUserId(), comment.getCreatedAt());
+        return commentRepository.save(comment);
     }
 
     // 댓글 삭제
