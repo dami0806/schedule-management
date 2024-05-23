@@ -33,8 +33,23 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "e36f112d-c6f2-466f-aad8-14dcdc16360b";
 
+    // 회원가입
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
+
+        // username 최소 4자 이상, 10자 이하이며 알파벳 소문자(a~z), 숫자(0~9)
+        if(!username.matches("^[a-z0-9]{4,10}$")) {
+            throw new IllegalArgumentException("아이디는 최소 4자 이상, 10자 이하이며 알파벳 소문자(a~z)와 숫자(0~9)로 구성되어야 합니다.");
+
+        }
+
+//        String password = requestDto.getPassword();
+//
+//        // password  최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)
+//        if(!requestDto.getPassword().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,15}$")) {
+//            throw new IllegalArgumentException("비밀번호은 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z)와 숫자(0~9)로 구성되어야 합니다.");
+//        }
+        // 비밀번호 인코딩 암호화했다가 조건에서 풀라함
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
@@ -59,7 +74,7 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        // 사용자 등록
+        // 새로운 사용자 객체 생성 - 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
         logger.info("회원가입 성공: " + user.getUsername());

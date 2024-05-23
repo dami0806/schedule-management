@@ -5,6 +5,7 @@ import com.sparta.scheduleapp.auth.dto.SignupRequestDto;
 import com.sparta.scheduleapp.auth.dto.TokenResponseDto;
 import com.sparta.scheduleapp.auth.service.UserService;
 import com.sparta.scheduleapp.auth.util.JwtUtil;
+import com.sparta.scheduleapp.comment.dto.RefreshTokenRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,6 @@ public class AuthRestController {
         this.jwtUtil = jwtUtil;
     }
 
-
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
@@ -40,15 +40,15 @@ public class AuthRestController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDto> refresh(@RequestBody String refreshToken) {
+    public ResponseEntity<TokenResponseDto> refresh(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        String refreshToken = refreshTokenRequestDto.getRefreshToken();
 
         if (jwtUtil.validateRefreshToken(refreshToken)) {
             String newAccessToken = jwtUtil.refreshToken(refreshToken);
             TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, refreshToken);
             return ResponseEntity.ok(tokenResponseDto);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 이걸 받았을때 클라이언트에서 리다이렉트로 로그인 화면으로 보내야함
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-
 }

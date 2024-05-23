@@ -1,6 +1,8 @@
 package com.sparta.scheduleapp.auth.entity;
 
-public enum UserRoleEnum {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum UserRoleEnum implements GrantedAuthority {
     USER(Authority.USER),  // 사용자 권한
     ADMIN(Authority.ADMIN);  // 관리자 권한
 
@@ -10,8 +12,9 @@ public enum UserRoleEnum {
         this.authority = authority;
     }
 
+    @Override
     public String getAuthority() {
-        return this.authority;
+        return name();
     }
 
     public static class Authority {
