@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +34,10 @@ public class ScheduleController {
 
     @PostMapping("/schedules")
     @Operation(summary = "스케줄 추가", description = "새로운 스케줄을 추가합니다.")
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
         //여기서 ScheduleResponseDto .... = service(dto)받고
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ScheduleResponseDto(scheduleService.createSchedule(requestDto)));
+        return ResponseEntity.status(HttpStatus.CREATED).body
+                (new ScheduleResponseDto(scheduleService.createSchedule(requestDto, userDetails.getUsername())));
     }
 
     @GetMapping("/schedules")
@@ -54,17 +57,17 @@ public class ScheduleController {
 
     @PutMapping("/schedules/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto,@AuthenticationPrincipal UserDetails userDetails) {
      // return scheduleService.updateSchedule(id, requestDto);
-        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.updateSchedule(id, requestDto)));
+        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.updateSchedule(id, requestDto, userDetails.getUsername())));
     }
 
     @DeleteMapping("/schedules/{id}")
     @Operation(summary = "스케줄 삭제", description = "특정 스케줄을 삭제합니다.")
-    public ResponseEntity<String> deleteSchedule(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSchedule(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
 
         //return scheduleService.deleteSchedule(id);
-        return ResponseEntity.ok(scheduleService.deleteSchedule(id));
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id,userDetails.getUsername()));
     }
 
     @PostMapping("/schedules/validatePassword/{id}")

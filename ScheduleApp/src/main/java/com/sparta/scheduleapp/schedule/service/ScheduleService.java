@@ -22,13 +22,15 @@ public class ScheduleService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
     private final ScheduleRepository scheduleRepository;
 
-    public Schedule createSchedule(ScheduleRequestDto requestDto) {
+    // 스케줄 생성
+    public Schedule createSchedule(ScheduleRequestDto requestDto, String username) {
         Schedule schedule = new Schedule(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
                 requestDto.getAssignee(),
                 requestDto.getDate(),
-                requestDto.getPassword()
+                requestDto.getPassword(),
+                username
         );
 
         return scheduleRepository.save(schedule);
@@ -44,6 +46,7 @@ public class ScheduleService {
                 .orElseThrow(() -> new IllegalArgumentException("스케줄을 찾을 수 없습니다.")); // 스케줄 존재 여부 확인
     }
 
+
     public Schedule getDetailSchedule(Long id) {
         return findSchedule(id);
     }
@@ -57,15 +60,22 @@ public class ScheduleService {
         }
     }
 
-    public String deleteSchedule(Long id) {
+    // 일정 삭제
+    public String deleteSchedule(Long id,String username) {
         Schedule schedule = findSchedule(id);
-        scheduleRepository.delete(schedule);
+        if (!schedule.getCreator().equals(username)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+            scheduleRepository.delete(schedule);
         return "success";
     }
 
     @Transactional
-    public Schedule updateSchedule(Long id, ScheduleRequestDto requestDto) {
+    public Schedule updateSchedule(Long id, ScheduleRequestDto requestDto,String username) {
         Schedule schedule = findSchedule(id);
+        if (!schedule.getCreator().equals(username)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
         schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());
         return scheduleRepository.save(schedule);
     }
