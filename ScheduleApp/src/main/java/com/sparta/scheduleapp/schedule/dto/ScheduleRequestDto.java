@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp.dto;
+package com.sparta.scheduleapp.schedule.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

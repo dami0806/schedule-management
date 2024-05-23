@@ -1,16 +1,14 @@
-package com.sparta.scheduleapp.auth.dto;
+package com.sparta.scheduleapp.auth.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupRequestDto {
+public class LoginRequest {
     private String username;
     private String password;
-    private String email;
-    private boolean admin = false;
-    private String adminToken = "";
 }

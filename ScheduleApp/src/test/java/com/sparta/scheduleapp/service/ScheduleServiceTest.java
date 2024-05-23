@@ -1,9 +1,10 @@
 package com.sparta.scheduleapp.service;
 
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
-import com.sparta.scheduleapp.dto.ScheduleResponseDto;
-import com.sparta.scheduleapp.entity.Schedule;
-import com.sparta.scheduleapp.repository.ScheduleRepository;
+import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.schedule.dto.ScheduleResponseDto;
+import com.sparta.scheduleapp.schedule.entity.Schedule;
+import com.sparta.scheduleapp.schedule.repository.ScheduleRepository;
+import com.sparta.scheduleapp.schedule.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

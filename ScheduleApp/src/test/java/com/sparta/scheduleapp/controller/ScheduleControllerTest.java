@@ -1,12 +1,13 @@
 package com.sparta.scheduleapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.scheduleapp.dto.ScheduleRequestDto;
-import com.sparta.scheduleapp.dto.ScheduleResponseDto;
+import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.schedule.dto.ScheduleResponseDto;
 import com.sparta.scheduleapp.exception.ScheduleAlreadyDeletedException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
-import com.sparta.scheduleapp.service.ScheduleService;
+import com.sparta.scheduleapp.schedule.controller.ScheduleController;
+import com.sparta.scheduleapp.schedule.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp.entity;
+package com.sparta.scheduleapp.schedule.entity;
 
 import com.sparta.scheduleapp.comment.entity.Comment;
 import jakarta.persistence.*;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +37,22 @@ public class Schedule {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    public Schedule(String title, String description, String assignee, String date, String password) {
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true) // 스케줄과 연관된 모든 댓글을 즉시 로딩하고, 스케줄 삭제 시 연관된 댓글도 삭제
+    private List<Comment> comments = new ArrayList<>();
+
+    @Column(nullable = false)
+    private String creator; // 스케줄 생성자 정보
+
+
+    public Schedule(String title, String description, String assignee, String date, String password, String creator) {
         this.title = title;
         this.description = description;
         this.assignee = assignee;
         this.date = date;
         this.password = password;
+        this.creator = creator;
     }
+
 
     public void update(String title, String description, String assignee, String date, String password) {
         this.title = title;
