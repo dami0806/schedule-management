@@ -31,7 +31,7 @@ public class User implements UserDetails { // Spring Security의 UserDetails
 
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<GrantedAuthority> authorities;
+    private Set<String> authorities;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -46,14 +46,18 @@ public class User implements UserDetails { // Spring Security의 UserDetails
 //        Set<GrantedAuthority> authorities = new HashSet<>();
 //        authorities.add(() -> role.name());
 //        this.authorities = authorities;
-        this.authorities = Collections.singleton((GrantedAuthority)() -> role.name());
+        this.authorities = Collections.singleton(role.name());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return authorities;
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (String authority : this.authorities) {
+            grantedAuthorities.add(() -> authority);
+        }
+        return grantedAuthorities;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
