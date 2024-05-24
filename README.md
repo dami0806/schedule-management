@@ -81,7 +81,7 @@
 | 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 
 # ⚡️8. 사용된 기술 개념
-
+### [리펙토링](https://github.com/dami0806/ScheduleManagement/wiki/%EC%A2%8B%EC%9D%80-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-%EA%B3%A0%EB%AF%BC#1%EB%B6%88%EB%B3%80%EC%84%B1-%EC%9C%A0%EC%A7%80-%EA%B3%A0%EB%AF%BC)
 ### [Test코드](https://github.com/dami0806/ScheduleManagement/wiki/TestCode#mockito%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
 ###  [Exception처리](https://github.com/dami0806/ScheduleManagement/wiki/Exception%EC%B2%98%EB%A6%AC#%EC%9A%94%EC%95%BD)
 ### [Swagger](https://github.com/dami0806/ScheduleManagement/wiki/Swagger#%EC%9C%A0%ED%9A%A8%EC%84%B1-%EA%B2%80%EC%82%AC%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EA%B3%A0-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
