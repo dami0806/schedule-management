@@ -93,7 +93,7 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        String token = jwtUtil.createToken(user.getUsername());
+        String token = jwtUtil.createAccessToken(user.getUsername());
         logger.info("로그인 성공: 사용자 {}, 토큰 {}", user.getUsername(), token);
         return token;
     }

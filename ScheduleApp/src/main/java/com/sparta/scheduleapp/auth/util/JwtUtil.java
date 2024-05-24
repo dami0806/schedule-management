@@ -26,21 +26,19 @@ public class JwtUtil {
     private long refreshTokenExpiration;
 
     // 액세스 토큰 생성
-    public String createToken(String username) {
-        return Jwts.builder()
-                .setSubject(username) // 토큰 주체
-                .setIssuedAt(new Date()) // 토큰 발행 시간
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration)) // 토큰 만료시간
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+    public String createAccessToken(String username) {
+        return generateToken(username, tokenExpiration);
     }
 
     // 리프레시 토큰 생성
     public String createRefreshToken(String username) {
+        return generateToken(username, refreshTokenExpiration);
+    }
+    public String generateToken(String username, long expiration) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+                .setSubject(username) // 토큰 주체
+                .setIssuedAt(new Date()) // 토큰 발행 시간
+                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // 토큰 만료시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -80,7 +78,7 @@ public class JwtUtil {
         // 리프레시 유효
         if (validateRefreshToken(refreshToken)) {
             String username = getUsernameFromToken(refreshToken);
-            return createToken(username);
+            return createAccessToken(username);
         } else {
             // 이때 프론트가 적절히 로그인으로 유도
             throw new IllegalArgumentException("Refresh token이 만료 또는 유효하지 않음");
