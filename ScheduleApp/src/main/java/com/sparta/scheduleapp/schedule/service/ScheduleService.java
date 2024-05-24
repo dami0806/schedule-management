@@ -24,14 +24,14 @@ public class ScheduleService {
 
     // 스케줄 생성
     public Schedule createSchedule(ScheduleRequestDto requestDto, String username) {
-        Schedule schedule = new Schedule(
-                requestDto.getTitle(),
-                requestDto.getDescription(),
-                requestDto.getAssignee(),
-                requestDto.getDate(),
-                requestDto.getPassword(),
-                username
-        );
+        Schedule schedule = Schedule.builder()
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .assignee(requestDto.getAssignee())
+                .date(requestDto.getDate())
+                .password(requestDto.getPassword())
+                .creator(username)
+                .build();
 
         return scheduleRepository.save(schedule);
     }
@@ -63,8 +63,16 @@ public class ScheduleService {
             log.error("권한이 없습니다: {}", username);
             throw new IllegalArgumentException("권한이 없습니다.");
         }
-        schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());
-        return scheduleRepository.save(schedule);
+        Schedule updatedSchedule = Schedule.builder()
+                .id(schedule.getId()) // 기존 id 유지
+                .title(requestDto.getTitle())
+                .description(requestDto.getDescription())
+                .assignee(requestDto.getAssignee())
+                .date(requestDto.getDate())
+                .password(requestDto.getPassword())
+                .creator(schedule.getCreator()) // 기존 작성자 유지
+                .build();
+        return scheduleRepository.save(updatedSchedule);
     }
 
     // 일정 삭제
