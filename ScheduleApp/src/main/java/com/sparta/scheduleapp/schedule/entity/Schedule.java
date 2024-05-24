@@ -45,20 +45,20 @@ public class Schedule {
 
 
     public Schedule(String title, String description, String assignee, String date, String password, String creator) {
+        this.init(title, description, assignee, date, password, creator);
+    }
+
+    public void update(String title, String description, String assignee, String date, String password) {
+        this.init(title, description, assignee, date, password, this.creator);
+       //new Schedule(title, description, assignee, date, password, this.creator);
+    }
+
+    public void init(String title, String description, String assignee, String date, String password, String creator) {
         this.title = title;
         this.description = description;
         this.assignee = assignee;
         this.date = date;
         this.password = password;
         this.creator = creator;
-    }
-
-
-    public void update(String title, String description, String assignee, String date, String password) {
-        this.title = title;
-        this.description = description;
-        this.assignee = assignee;
-        this.date = date;
-        this.password = password;
     }
 }
