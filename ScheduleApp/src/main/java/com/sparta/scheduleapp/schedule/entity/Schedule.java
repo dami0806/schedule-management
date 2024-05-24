@@ -3,10 +3,12 @@ package com.sparta.scheduleapp.schedule.entity;
 import com.sparta.scheduleapp.comment.entity.Comment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,22 +45,13 @@ public class Schedule {
     @Column(nullable = false)
     private String creator; // 스케줄 생성자 정보
 
-
-    public Schedule(String title, String description, String assignee, String date, String password, String creator) {
-        this.init(title, description, assignee, date, password, creator);
-    }
-
-    public void update(String title, String description, String assignee, String date, String password) {
-        this.init(title, description, assignee, date, password, this.creator);
-       //new Schedule(title, description, assignee, date, password, this.creator);
-    }
-
-    public void init(String title, String description, String assignee, String date, String password, String creator) {
+    @Builder
+    public Schedule(Long id, String title, String description, String assignee, String date, String password, String creator) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.assignee = assignee;
         this.date = date;
         this.password = password;
         this.creator = creator;
-    }
-}
+    }}
