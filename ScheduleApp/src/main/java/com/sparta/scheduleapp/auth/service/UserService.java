@@ -1,14 +1,12 @@
 package com.sparta.scheduleapp.auth.service;
 
-
-import com.sparta.scheduleapp.auth.dto.LoginRequestDto;
-import com.sparta.scheduleapp.auth.dto.SignupRequestDto;
 import com.sparta.scheduleapp.auth.entity.LoginRequest;
 import com.sparta.scheduleapp.auth.entity.SignupRequest;
 import com.sparta.scheduleapp.auth.entity.User;
 import com.sparta.scheduleapp.auth.entity.UserRoleEnum;
 import com.sparta.scheduleapp.auth.repository.UserRepository;
 import com.sparta.scheduleapp.auth.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+//    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // 과제에 맞춰서 암호화 안썼는데 과제제출 후 다시 쓰고싶어서 남겨둠
@@ -79,7 +78,7 @@ public class UserService {
         // 새로운 사용자 객체 생성 - 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
-        logger.info("회원가입 성공: " + user.getUsername());
+        log.warn("회원가입 성공: " + user.getUsername());
     }
     public String login(LoginRequest loginRequest) {
         User user = userRepository.findByUsername(loginRequest.getUsername())
@@ -94,7 +93,7 @@ public class UserService {
         }
 
         String token = jwtUtil.createAccessToken(user.getUsername());
-        logger.info("로그인 성공: 사용자 {}, 토큰 {}", user.getUsername(), token);
+        log.info("로그인 성공: 사용자 {}, 토큰 {}", user.getUsername(), token);
         return token;
     }
 

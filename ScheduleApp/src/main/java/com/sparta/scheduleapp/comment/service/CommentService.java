@@ -1,6 +1,5 @@
 package com.sparta.scheduleapp.comment.service;
 
-import com.sparta.scheduleapp.comment.dto.CommentRequestDto;
 import com.sparta.scheduleapp.comment.entity.Comment;
 import com.sparta.scheduleapp.comment.repository.CommentRepository;
 import com.sparta.scheduleapp.schedule.entity.Schedule;
@@ -25,12 +24,16 @@ public class CommentService {
     public Comment addComment(Long scheduleId, String content, String userId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new IllegalArgumentException("스케줄을 찾을 수 없습니다.")); // 스케줄 존재 여부 확인
-        Comment comment = new Comment(content, userId, schedule); // 새로운 댓글 객체 생성
+        Comment comment = Comment.builder()
+                .content(content)
+                .userId(userId)
+                .schedule(schedule)
+                .build(); // 새로운 댓글 객체 생성
         return commentRepository.save(comment); // 댓글 저장
     }
 
     // 댓글 수정
-    public Comment updateComment(Long commentId, CommentRequestDto requestDto, String userId) {
+    public Comment updateComment(Long commentId, String updatedComment, String userId) {
         Optional<Comment> commentOpt = commentRepository.findById(commentId);
         if (commentOpt.isEmpty()) {
             throw new IllegalArgumentException("댓글을 찾을 수 없습니다.");
@@ -41,7 +44,7 @@ public class CommentService {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
 
-        comment.updateContent(requestDto.getContent());
+        comment.updateContent(updatedComment);
         return commentRepository.save(comment);
     }
 
