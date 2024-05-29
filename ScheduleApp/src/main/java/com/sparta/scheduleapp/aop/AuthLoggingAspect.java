@@ -20,7 +20,10 @@ import java.time.LocalDateTime;
 public class AuthLoggingAspect {
     private final LoginHistoryRepository loginHistoryRepository;
 
-    // 로그인 시도 전
+    /**
+     * 로그인 시도 전
+     * @param loginRequest: 로그인 요청
+     */
     @Before("execution(* com.sparta.scheduleapp.auth.service.UserService.login(..)) && args(loginRequest))")
     public void logBeforeLoginAttempt(LoginRequest loginRequest) {
         LoginHistory loginHistory = new LoginHistory(loginRequest.getUsername(), LoginAction.LOGIN_ATTEMPT, LocalDateTime.now());
@@ -28,7 +31,10 @@ public class AuthLoggingAspect {
         log.info("로그인 시도: {}", loginRequest.getUsername());
     }
 
-    // 로그인 성공
+    /**
+     * 로그인 성공
+     * @param loginRequest: 로그인 성공한 들어온 요청
+     */
     @AfterReturning("execution(* com.sparta.scheduleapp.auth.service.UserService.login(..)) && args(loginRequest))")
     public void logAfterLoginSuccess(LoginRequest loginRequest) {
         LoginHistory loginHistory = new LoginHistory(loginRequest.getUsername(), LoginAction.LOGIN_SUCCESS, LocalDateTime.now());
@@ -36,8 +42,10 @@ public class AuthLoggingAspect {
         log.info("로그인 성공: {}", loginRequest.getUsername());
     }
 
-    // 로그인 실패
-    @AfterThrowing("execution(* com.sparta.scheduleapp.auth.service.UserService.login(..)) && args(loginRequest))")
+    /**
+     * 로그인 실패
+     * @param loginRequest: 로그인 실패한 들어온 요청
+     */    @AfterThrowing("execution(* com.sparta.scheduleapp.auth.service.UserService.login(..)) && args(loginRequest))")
     public void logAfterLoginFailure(LoginRequest loginRequest) {
         loginHistoryRepository.save(new LoginHistory(loginRequest.getUsername(), LoginAction.LOGIN_FAILURE, LocalDateTime.now()));
         log.info("로그인 실패: {}", loginRequest.getUsername());
