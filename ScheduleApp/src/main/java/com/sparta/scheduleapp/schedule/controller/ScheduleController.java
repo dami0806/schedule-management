@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 스케줄 관리 Controller
+ */
 @RestController
 @RequestMapping("/api")
 @Tag(name = "ScheduleController", description = "스케줄 관리 API")

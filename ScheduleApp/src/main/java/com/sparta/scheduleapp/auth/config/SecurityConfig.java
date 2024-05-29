@@ -11,9 +11,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.swing.*;
+
 @Configuration
 @EnableWebSecurity
-// SecurityConfig- Spring Security 설정
+/**
+ * SecurityConfig- Spring Security 설정
+  */
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -22,6 +26,12 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    /**
+     * SecurityFilterChain: 보안 설정을 기반으로 SecurityFilterChain 생성
+     * @param http : HttpSecurity객체로, CSRF 비활성화, 세션 관리, 요청 권한, 필터 추가
+     * @return SecurityFilterChain객체 생성(http 요청의 보안 규칙이 적용된)
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
@@ -41,7 +51,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-     // JWT 필터 추가
+        /**
+         * jwtAuthenticationFilter 후에 password 필터 지정
+         */
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
