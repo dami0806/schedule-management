@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * AuthLoggingAspect: 로그인 실행 흐름 aop
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor

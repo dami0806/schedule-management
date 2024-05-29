@@ -10,12 +10,14 @@ import com.sparta.scheduleapp.auth.util.JwtUtil;
 import com.sparta.scheduleapp.comment.dto.RefreshTokenRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.cors.CorsConfiguration;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -61,14 +63,11 @@ public class AuthRestController {
     @Operation(summary = "토큰값 갱신", description = "Refresh토큰으로 토큰값 갱신")
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponseDto> refresh(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-        String refreshToken = refreshTokenRequestDto.getRefreshToken();
 
-        if (jwtUtil.validateRefreshToken(refreshToken)) {
-            String newAccessToken = jwtUtil.refreshToken(refreshToken);
-            TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, refreshToken);
-            return ResponseEntity.ok(tokenResponseDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
+        String refreshToken = refreshTokenRequestDto.getRefreshToken();
+        String newAccessToken = jwtUtil.refreshToken(refreshToken);
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, refreshToken);
+        return ResponseEntity.ok(tokenResponseDto);
+
     }
 }
