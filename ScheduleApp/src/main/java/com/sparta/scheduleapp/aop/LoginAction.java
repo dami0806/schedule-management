@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp.auth.entity;
+package com.sparta.scheduleapp.aop;
 
 public enum LoginAction {
     //시도 성공 실패

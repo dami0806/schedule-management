@@ -1,7 +1,6 @@
-package com.sparta.scheduleapp;
+package com.sparta.scheduleapp.aop;
 
-import com.sparta.scheduleapp.auth.entity.LoginAction;
-import com.sparta.scheduleapp.auth.entity.LoginHistory;
+import com.sparta.scheduleapp.aop.entity.LoginHistory;
 import com.sparta.scheduleapp.auth.entity.LoginRequest;
 import com.sparta.scheduleapp.auth.repository.LoginHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LoggingAspect {
+public class AuthLoggingAspect {
     private final LoginHistoryRepository loginHistoryRepository;
 
     // 로그인 시도 전
