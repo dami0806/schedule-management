@@ -81,8 +81,16 @@
 | 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 |회원가입 |<img width="984" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/f961fd00-242f-47ec-877c-bc9c3085759b">|
 |로그인 | <img width="1157" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
-|스케줄 작성|<img width="986" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/738babdb-ab3f-42bc-bb68-a40b262998f4">|
+|토큰값 갱신||
+|스케줄 작성|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/738babdb-ab3f-42bc-bb68-a40b262998f4">|
+|스케줄 목록조회|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/b7aa9a51-a1be-4911-926b-6a0c29586fa4">|
+|스케줄 수정|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/2a09107b-d857-401e-abb3-4d377926d0a5">|
+|스케줄 상세조회|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/0044fa12-3e00-4c63-8ec8-878f0502d39a">|
+|댓글 작성|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/a3a3cf5b-4915-4ea4-b8ee-8d8ccf3af888">|
+|댓글 수정|<img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/acdd9117-2fcd-4b6e-a651-f2fcbdeed3f2">  <img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/d0876d8c-c9f2-4f71-a1f8-4ff94f5dbc1c">|
+|댓글 삭제|<img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/7c93fa68-cdff-4966-ada0-d214eb8b367b">  <img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/1dcac384-234c-4a0f-a085-ed9b92e3c0cf">
 
+|
 # ⚡️8. 사용된 기술 개념
 ### [리펙토링](https://github.com/dami0806/ScheduleManagement/wiki/%EC%A2%8B%EC%9D%80-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-%EA%B3%A0%EB%AF%BC#1%EB%B6%88%EB%B3%80%EC%84%B1-%EC%9C%A0%EC%A7%80-%EA%B3%A0%EB%AF%BC)
 ### [Test코드](https://github.com/dami0806/ScheduleManagement/wiki/TestCode#mockito%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80)
