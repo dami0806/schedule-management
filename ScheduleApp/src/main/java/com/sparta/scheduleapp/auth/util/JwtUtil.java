@@ -43,6 +43,11 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     *  JWT 토큰에서 Claims을 추출 페이로드(사용자 정보)
+     * @param token JWT 토큰
+     * @return 토큰에서 추출한 Claims 객체
+     */
     public Claims extractClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
@@ -50,13 +55,18 @@ public class JwtUtil {
                 .getBody();
     }
 
+    /**
+     * 토큰 유효성 검사: claim의 유저네임값과 userDetail의 이름 비교,
+     * @param token
+     * @param userDetails
+     * @return
+     */
     public boolean validateToken(String token, UserDetails userDetails) {
         // 토큰에서 사용자 이름 추출
         final String username = getUsernameFromToken(token);
         // 토큰 검사(이름 일치, 만료 확인)
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
 
     // 리프레시토큰 유효성 검사
     public boolean validateRefreshToken(String token) {
@@ -73,7 +83,12 @@ public class JwtUtil {
         }
     }
 
-    // 리프레시 토큰으로 토큰 재발급 - 엑세스 토큰 만료시
+
+    /**
+     * 리프레시 토큰으로 토큰 재발급 - 엑세스 토큰 만료시
+     * @param refreshToken
+     * @return
+     */
     public String refreshToken(String refreshToken) {
         // 리프레시 유효
         if (validateRefreshToken(refreshToken)) {
@@ -85,6 +100,11 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * 토큰 만료일 claim 추출
+     * @param token JWT 토큰
+     * @return 현재 시간
+     */
     private boolean isTokenExpired(String token) {
         final Date expiration = extractClaims(token).getExpiration();
         return expiration.before(new Date());

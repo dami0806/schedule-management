@@ -13,5 +13,4 @@ public class SignupRequest {
     private String email;
     private boolean isAdmin;
     private String adminToken;
-
 }

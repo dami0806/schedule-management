@@ -37,7 +37,7 @@ public class CommentController {
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
-        Comment comment = commentService.updateComment(commentId, requestDto, userId);
+        Comment comment = commentService.updateComment(commentId, requestDto.getContent(), userId);
         CommentResponseDto responseDto = new CommentResponseDto(comment);
         return ResponseEntity.ok(responseDto);
     }

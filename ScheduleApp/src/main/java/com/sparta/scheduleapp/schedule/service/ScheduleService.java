@@ -1,5 +1,6 @@
 package com.sparta.scheduleapp.schedule.service;
 
+import com.sparta.scheduleapp.exception.UnauthorizedException;
 import com.sparta.scheduleapp.schedule.dto.ScheduleRequestDto;
 import com.sparta.scheduleapp.exception.InvalidPasswordException;
 import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
@@ -61,7 +62,7 @@ public class ScheduleService {
         Schedule schedule = findSchedule(id);
         if (!schedule.getCreator().equals(username)) {
             log.error("권한이 없습니다: {}", username);
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new UnauthorizedException("권한이 없습니다.");
         }
         Schedule updatedSchedule = Schedule.builder()
                 .id(schedule.getId()) // 기존 id 유지
@@ -81,7 +82,7 @@ public class ScheduleService {
         if (!schedule.getCreator().equals(username)) {
             log.error("권한이 없습니다: {}", username);
 
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new UnauthorizedException("권한이 없습니다.");
         }
             scheduleRepository.delete(schedule);
         return "success";

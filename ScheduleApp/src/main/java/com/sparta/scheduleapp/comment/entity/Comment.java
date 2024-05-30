@@ -2,10 +2,7 @@ package com.sparta.scheduleapp.comment.entity;
 
 import com.sparta.scheduleapp.schedule.entity.Schedule;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -33,6 +30,7 @@ public class Comment {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder
     public Comment(String content, String userId, Schedule schedule) {
         this.content = content;
         this.userId = userId;
@@ -40,6 +38,7 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
     }
 
+    // 성능상 객체 생성 보다 업데이트 고려
     public void updateContent(String content) {
         this.content = content;
     }

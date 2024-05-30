@@ -1,4 +1,4 @@
-package com.sparta.scheduleapp;
+package com.sparta.scheduleapp.aop;
 
 public class EventHistoryRepository {
 }

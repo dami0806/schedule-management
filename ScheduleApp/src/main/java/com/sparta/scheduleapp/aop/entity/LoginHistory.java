@@ -1,5 +1,6 @@
-package com.sparta.scheduleapp.auth.entity;
+package com.sparta.scheduleapp.aop.entity;
 
+import com.sparta.scheduleapp.aop.LoginAction;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
