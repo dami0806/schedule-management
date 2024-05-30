@@ -1,5 +1,6 @@
 package com.sparta.scheduleapp.auth.filter;
 
+import com.sparta.scheduleapp.auth.service.UserDetailsServiceImpl;
 import com.sparta.scheduleapp.auth.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     /**
      *요청 필터링: JWT 토큰을 검증해서 유효하면 사용자 정보 설정
