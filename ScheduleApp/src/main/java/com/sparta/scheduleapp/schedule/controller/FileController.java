@@ -1,7 +1,7 @@
 package com.sparta.scheduleapp.schedule.controller;
 
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
-import com.sparta.scheduleapp.exception.FileTypeNotAllowedException;
+import com.sparta.scheduleapp.exception.message.file.FileTypeNotAllowedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

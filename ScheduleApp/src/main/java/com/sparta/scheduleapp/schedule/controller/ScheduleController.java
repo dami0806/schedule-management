@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -31,16 +32,28 @@ public class ScheduleController {
     private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);
 
     private final ScheduleService scheduleService;
+
     public ScheduleController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
 
     @PostMapping("/schedules")
     @Operation(summary = "스케줄 추가", description = "새로운 스케줄을 추가합니다.")
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestPart("data") @Valid ScheduleRequestDto requestDto,
+                                                              @RequestPart(value = "file", required = false) MultipartFile file,
+                                                              @AuthenticationPrincipal UserDetails userDetails) {
+
+        // 요청 데이터 로그 출력
+        log.info("Request Data: {}", requestDto);
+        if (file != null) {
+            log.info("File received: {}", file.getOriginalFilename());
+        } else {
+            log.info("No file received.");
+        }
+
         //여기서 ScheduleResponseDto .... = service(dto)받고
         return ResponseEntity.status(HttpStatus.CREATED).body
-                (new ScheduleResponseDto(scheduleService.createSchedule(requestDto, userDetails.getUsername())));
+                (new ScheduleResponseDto(scheduleService.createSchedule(requestDto, file, userDetails.getUsername())));
     }
 
     @GetMapping("/schedules")
@@ -54,15 +67,18 @@ public class ScheduleController {
     @GetMapping("/schedules/{id}")
     @Operation(summary = "스케줄 상세 조회", description = "특정 스케줄의 상세 정보를 조회합니다.")
     public ResponseEntity<ScheduleResponseDto> getDetailSchedule(@PathVariable Long id) {
-     //return scheduleService.getDetailSchedule(id);
+        //return scheduleService.getDetailSchedule(id);
         return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.getDetailSchedule(id)));
     }
 
     @PutMapping("/schedules/{id}")
     @Operation(summary = "스케줄 수정", description = "특정 스케줄을 수정합니다.")
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequestDto requestDto,@AuthenticationPrincipal UserDetails userDetails) {
-     // return scheduleService.updateSchedule(id, requestDto);
-        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.updateSchedule(id, requestDto, userDetails.getUsername())));
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id,
+                                                              @RequestPart("data") @Valid ScheduleRequestDto requestDto,
+                                                              @RequestPart(value = "file", required = false) MultipartFile file,
+                                                              @AuthenticationPrincipal UserDetails userDetails) {
+        // return scheduleService.updateSchedule(id, requestDto);
+        return ResponseEntity.ok(new ScheduleResponseDto(scheduleService.updateSchedule(id, requestDto, file, userDetails.getUsername())));
     }
 
     @DeleteMapping("/schedules/{id}")
@@ -70,13 +86,13 @@ public class ScheduleController {
     public ResponseEntity<String> deleteSchedule(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
 
         //return scheduleService.deleteSchedule(id);
-        return ResponseEntity.ok(scheduleService.deleteSchedule(id,userDetails.getUsername()));
+        return ResponseEntity.ok(scheduleService.deleteSchedule(id, userDetails.getUsername()));
     }
 
     @PostMapping("/schedules/validatePassword/{id}")
     @Operation(summary = "비밀번호 검증", description = "특정 스케줄의 비밀번호를 검증합니다.")
     public ResponseEntity<Boolean> verifyPassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-       //return scheduleService.verifyPassword(id, requestBody.get("password"));
+        //return scheduleService.verifyPassword(id, requestBody.get("password"));
         return ResponseEntity.ok(scheduleService.verifyPassword(id, requestBody.get("password")));
     }
 }

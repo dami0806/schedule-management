@@ -1,5 +1,6 @@
 package com.sparta.scheduleapp.exception;
 
+import com.sparta.scheduleapp.exception.message.file.FileTypeNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.nio.file.FileAlreadyExistsException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +70,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInfoNotFoundException(InfoNotCorrectedException ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+    }
+
+    // 파일이 정상적으로 저장이 안됨
+    @ExceptionHandler(FileAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleFileNotSaveException(FileAlreadyExistsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
