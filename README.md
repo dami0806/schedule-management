@@ -79,6 +79,9 @@
 |  **프로젝트 스크린샷**  |   |
 |-----------|------|
 | 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
+|회원가입 |<img width="984" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/f961fd00-242f-47ec-877c-bc9c3085759b">|
+|로그인 | <img width="1157" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
+|스케줄 작성|<img width="986" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/738babdb-ab3f-42bc-bb68-a40b262998f4">|
 
 # ⚡️8. 사용된 기술 개념
 ### [리펙토링](https://github.com/dami0806/ScheduleManagement/wiki/%EC%A2%8B%EC%9D%80-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-%EA%B3%A0%EB%AF%BC#1%EB%B6%88%EB%B3%80%EC%84%B1-%EC%9C%A0%EC%A7%80-%EA%B3%A0%EB%AF%BC)
