@@ -2,6 +2,7 @@ package com.sparta.scheduleapp.schedule.dto;
 
 
 import com.sparta.scheduleapp.comment.dto.CommentResponseDto;
+import com.sparta.scheduleapp.file.dto.FileResponseDto;
 import lombok.Getter;
 import com.sparta.scheduleapp.schedule.entity.Schedule;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class ScheduleResponseDto {
     private String assignee;
     private String date;
     private List<CommentResponseDto> comments;
+    private FileResponseDto file;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -31,5 +33,9 @@ public class ScheduleResponseDto {
         this.comments = schedule.getComments().stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+
+        if (schedule.getFile() != null) {
+            this.file = new FileResponseDto(schedule.getFile());
+        }
     }
 }
