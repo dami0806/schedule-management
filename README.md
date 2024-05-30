@@ -78,6 +78,7 @@
 **프로젝트 스크린샷**
 | 작업 내용 | 사진 |
 |-----------|------|
+|Erd| <img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/157a0997-236a-43a3-afaf-1f2d89cf4533">|
 | 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 |회원가입 |<img width="984" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/f961fd00-242f-47ec-877c-bc9c3085759b">|
 |로그인 | <img width="1157" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
