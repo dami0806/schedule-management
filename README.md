@@ -72,8 +72,8 @@
 |Erd| <img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/157a0997-236a-43a3-afaf-1f2d89cf4533">|
 | 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 |회원가입 |<img width="984" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/f961fd00-242f-47ec-877c-bc9c3085759b">|
-|로그인 | <img width="1157" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
-|토큰값 갱신||
+|로그인 | <img width="1000" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
+|토큰값 갱신|<img width="1000" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/1a30c63b-2435-4879-88f6-aa217777ceac">|
 |스케줄 작성|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/738babdb-ab3f-42bc-bb68-a40b262998f4">|
 |스케줄 목록조회|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/b7aa9a51-a1be-4911-926b-6a0c29586fa4">|
 |스케줄 수정|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/2a09107b-d857-401e-abb3-4d377926d0a5">|
