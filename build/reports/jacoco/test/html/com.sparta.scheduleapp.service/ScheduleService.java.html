@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScheduleService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ScheduleApp</a> &gt; <a href="index.source.html" class="el_package">com.sparta.scheduleapp.service</a> &gt; <span class="el_source">ScheduleService.java</span></div><h1>ScheduleService.java</h1><pre class="source lang-java linenums">package com.sparta.scheduleapp.service;
+
+import com.sparta.scheduleapp.dto.ScheduleRequestDto;
+import com.sparta.scheduleapp.dto.ScheduleResponseDto;
+import com.sparta.scheduleapp.exception.InvalidPasswordException;
+import com.sparta.scheduleapp.exception.ScheduleNotFoundException;
+import com.sparta.scheduleapp.exception.message.ErrorMessage;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.sparta.scheduleapp.controller.ScheduleController;
+import com.sparta.scheduleapp.entity.Schedule;
+import com.sparta.scheduleapp.repository.ScheduleRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+<span class="nc" id="L23">@RequiredArgsConstructor</span>
+public class ScheduleService {
+
+<span class="nc" id="L26">    private static final Logger log = LoggerFactory.getLogger(ScheduleController.class);</span>
+    private final ScheduleRepository scheduleRepository;
+
+    // Entity -&gt; Dto 여기서 스케줄에 dto넣기
+    //그럼 여기서 ScheduleResponseDto로 넘기고
+    //public ResponseEntity&lt;ScheduleResponseDto&gt; createSchedule(ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+            //Dto -&gt; Entity 넣고 저장
+<span class="nc" id="L34">            Schedule schedule = new Schedule(</span>
+<span class="nc" id="L35">                    1L,</span>
+<span class="nc" id="L36">                    requestDto.getTitle(),</span>
+<span class="nc" id="L37">                    requestDto.getDescription(),</span>
+<span class="nc" id="L38">                    requestDto.getAssignee(),</span>
+<span class="nc" id="L39">                    requestDto.getDate(),</span>
+<span class="nc" id="L40">                    requestDto.getPassword(),</span>
+                    false
+            );
+
+
+<span class="nc" id="L45">            scheduleRepository.save(schedule);</span>
+
+            //Entity -&gt; Dto  ResponseEntity로 반환
+<span class="nc" id="L48">            ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);</span>
+<span class="nc" id="L49">            return responseDto;</span>
+    }
+
+    public List&lt;ScheduleResponseDto&gt; getScheduleList() {
+<span class="nc" id="L53">        List&lt;Schedule&gt; schedules = scheduleRepository.findAll();</span>
+<span class="nc" id="L54">        return schedules.stream()</span>
+<span class="nc" id="L55">                .map(ScheduleResponseDto::new)</span>
+<span class="nc" id="L56">                .collect(Collectors.toList());</span>
+
+    }
+
+    //public ResponseEntity&lt;ScheduleResponseDto&gt; getDetailSchedule(Long id) {
+    public ScheduleResponseDto getDetailSchedule(Long id) {
+
+<span class="nc" id="L63">            Schedule schedule = findSchedule(id);</span>
+<span class="nc" id="L64">            return new ScheduleResponseDto(schedule);</span>
+    }
+
+
+    // Schedule 객체를 반환하는 헬퍼 메서드
+
+    public boolean verifyPassword(Long id, String password) {
+<span class="nc" id="L71">        Schedule schedule = findSchedule(id);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (schedule.getPassword().equals(password)) {</span>
+<span class="nc" id="L73">            return true;</span>
+        } else {
+<span class="nc" id="L75">            throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);</span>
+        }
+    }
+
+    //public ResponseEntity&lt;String&gt; deleteSchedule(Long id) {
+    public String deleteSchedule(Long id) {
+<span class="nc" id="L81">        Schedule schedule = findSchedule(id);</span>
+
+<span class="nc" id="L83">        scheduleRepository.delete(schedule);</span>
+<span class="nc" id="L84">        return &quot;success&quot;;</span>
+
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+<span class="nc" id="L90">        Schedule schedule = findSchedule(id);</span>
+<span class="nc" id="L91">        schedule.update(requestDto.getTitle(), requestDto.getDescription(), requestDto.getAssignee(), requestDto.getDate(), requestDto.getPassword());</span>
+<span class="nc" id="L92">        scheduleRepository.save(schedule);</span>
+<span class="nc" id="L93">        return new ScheduleResponseDto(schedule);</span>
+
+    }
+
+
+
+    private Schedule findSchedule(Long id) {
+<span class="nc" id="L100">        return scheduleRepository.findById(id).orElseThrow(() -&gt;</span>
+<span class="nc" id="L101">                new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

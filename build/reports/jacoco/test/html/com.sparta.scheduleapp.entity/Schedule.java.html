@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Schedule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ScheduleApp</a> &gt; <a href="index.source.html" class="el_package">com.sparta.scheduleapp.entity</a> &gt; <span class="el_source">Schedule.java</span></div><h1>Schedule.java</h1><pre class="source lang-java linenums">package com.sparta.scheduleapp.entity;
+
+import com.sparta.scheduleapp.dto.ScheduleRequestDto;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+
+<span class="nc" id="L12">@NoArgsConstructor</span>
+<span class="nc" id="L13">@AllArgsConstructor</span>
+@Entity
+
+@Table(name = &quot;schedule&quot;)
+public class Schedule {
+    //엔티티 -&gt; 데이터베이스에 넘길것
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L21">    private Long id;</span>
+
+    @Column(name = &quot;title&quot;, nullable = false, length = 200)
+<span class="nc" id="L24">    private String title;</span>
+    @Column(name = &quot;description&quot;, nullable = false, length = 200)
+<span class="nc" id="L26">    private String description;</span>
+    @Column(name = &quot;assignee&quot;, nullable = false, length = 100)
+<span class="nc" id="L28">    private String assignee;</span>
+    @Column(name = &quot;date&quot;, nullable = false, length = 200)
+<span class="nc" id="L30">    private String date;</span>
+    @Column(name = &quot;password&quot;, nullable = false, length = 200)
+<span class="nc" id="L32">    private String password;</span>
+<span class="nc" id="L33">    @Column(name = &quot;isDeleted&quot;)</span>
+<span class="nc" id="L34">    private boolean isDeleted = false;</span>
+
+    /*
+    서비스로 보내기 ScheduleService
+    -&gt;  DTO를 엔티티사이 변환하는 로직
+        public Schedule(ScheduleRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.description = requestDto.getDescription();
+        this.assignee = requestDto.getAssignee();
+        this.date = requestDto.getDate();
+        this.password = requestDto.getPassword();
+    }
+     */
+
+    public void update(String title, String description, String assignee, String date, String password) {
+<span class="nc" id="L49">        this.title = title;</span>
+<span class="nc" id="L50">        this.description = description;</span>
+<span class="nc" id="L51">        this.assignee = assignee;</span>
+<span class="nc" id="L52">        this.date = date;</span>
+<span class="nc" id="L53">        this.password = password;</span>
+<span class="nc" id="L54">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container mt-4">
+    <!-- Login and Signup Buttons -->
+    <div class="d-flex justify-content-end mb-3">
+        <button id="loginButton" class="btn btn-primary me-2">로그인</button>
+        <button id="signupButton" class="btn btn-secondary">회원가입</button>
+    </div>
+
+    <h1>할일 목록</h1>
+    <button class="btn btn-success mb-3" onclick="showAddScheduleForm()">새 할일 추가</button>
+    <div id="scheduleList" class="row"></div>
+
+    <!-- Schedule Form Modal -->
+    <div class="modal fade" id="scheduleFormModal" tabindex="-1" aria-labelledby="scheduleFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleFormModalLabel">새 할일 추가</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">할일 제목:</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">할일 내용:</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignee" class="form-label">담당자:</label>
+                            <input type="text" class="form-control" id="assignee" name="assignee" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">작성일:</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">비밀번호:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="createSchedule()">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleModalLabel">할일 세부사항</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Details will be filled by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="editButton">수정</button>
+                    <button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // 로그인 및 회원가입 버튼 클릭 이벤트 설정
+        $('#loginButton').click(function() {
+            window.location.href = '/api/auth/login';
+        });
+        $('#signupButton').click(function() {
+            window.location.href = '/api/auth/signup';
+        });
+    });
+
+    $(document).ready(function() {
+        fetchSchedules();
+        // 모달이 닫힐 때 저장 버튼과 취소 버튼을 초기화하는 이벤트 리스너 추가
+        $('#scheduleModal').on('hide.bs.modal', function () {
+            $('#editButton').show();
+            $('#deleteButton').show();
+            $('#saveButton').remove();
+        });
+    });
+
+    function fetchSchedules() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/schedules',
+            success: function(response) {
+                response.forEach(addScheduleToList);
+            },
+            error: function() {
+                alert('스케줄 목록을 불러오는 데 실패했습니다.');
+            }
+        });
+    }
+
+    function addScheduleToList(schedule) {
+        let scheduleCard = $(`
+            <div class="col-md-4 mb-3" id="schedule-${schedule.id}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">${schedule.title}</h5>
+                        <p class="card-text">${schedule.assignee}</p>
+                        <button onclick="showDetails(${schedule.id})" class="btn btn-primary">세부사항 보기</button>
+                    </div>
+                </div>
+            </div>
+        `);
+        $('#scheduleList').append(scheduleCard);
+    }
+
+    function showDetails(scheduleId) {
+        $.ajax({
+            type: 'GET',
+            url: `/api/schedules/${scheduleId}`,
+            success: function(schedule) {
+                $('#scheduleModal .modal-body').html(`
+                    <div>
+                        <p>제목: <span id="detail-title">${schedule.title}</span></p>
+                        <p>내용: <span id="detail-description">${schedule.description}</span></p>
+                        <p>담당자: <span id="detail-assignee">${schedule.assignee}</span></p>
+                        <p>날짜: <span id="detail-date">${schedule.date}</span></p>
+                    </div>
+                `);
+
+                $('#editButton').off('click').on('click', function() {
+                    promptPassword(scheduleId, 'edit');
+                });
+                $('#deleteButton').off('click').on('click', function() {
+                    promptPassword(scheduleId, 'delete');
+                });
+
+                $('#scheduleModal').modal('show');
+            },
+            error: function() {
+                alert('스케줄 세부사항을 불러오는 데 실패했습니다.');
+            }
+        });
+    }
+
+    function promptPassword(scheduleId, action) {
+        let password = prompt("비밀번호를 입력하세요:");
+        if (!password) return;
+
+        $.ajax({
+            type: "POST",
+            url: `/api/schedules/validatePassword/${scheduleId}`,
+            contentType: "application/json",
+            data: JSON.stringify({ password: password }),
+            success: function(response) {
+                if (response) {
+                    performAction(scheduleId, action);
+                } else {
+                    alert('비밀번호가 일치하지 않습니다.');
+                }
+            },
+            error: function() {
+                alert('비밀번호 검증 실패');
+            }
+        });
+    }
+
+    function performAction(scheduleId, action) {
+        if (action === 'edit') {
+            editSchedule(scheduleId);
+        } else if (action === 'delete') {
+            deleteSchedule(scheduleId);
+        }
+    }
+
+    function editSchedule(scheduleId) {
+        let title = $('#detail-title').text();
+        let description = $('#detail-description').text();
+        let assignee = $('#detail-assignee').text();
+        let date = $('#detail-date').text();
+
+        $('#scheduleModal .modal-body').html(`
+            <div class="mb-3">
+                <label for="edit-title" class="form-label">제목:</label>
+                <input type="text" class="form-control" id="edit-title" value="${title}">
+            </div>
+            <div class="mb-3">
+                <label for="edit-description" class="form-label">내용:</label>
+                <textarea class="form-control" id="edit-description">${description}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="edit-assignee" class="form-label">담당자:</label>
+                <input type="text" class="form-control" id="edit-assignee" value="${assignee}">
+            </div>
+            <div class="mb-3">
+                <label for="edit-date" class="form-label">날짜:</label>
+                <input type="date" class="form-control" id="edit-date" value="${date}">
+            </div>
+        `);
+
+        $('#editButton').hide();
+        $('#deleteButton').hide();
+
+        if ($('#saveButton').length === 0) {
+            $('#scheduleModal .modal-footer').append(`<button id="saveButton" class="btn btn-primary" onclick="saveSchedule(${scheduleId})">저장</button>`);
+        }
+    }
+
+    function saveSchedule(scheduleId) {
+        let title = $('#edit-title').val();
+        let description = $('#edit-description').val();
+        let assignee = $('#edit-assignee').val();
+        let date = $('#edit-date').val();
+        let password = prompt("비밀번호를 입력하세요:"); // 비밀번호를 여기서 입력받음
+
+        if (!password) {
+            alert('비밀번호가 필요합니다.');
+            return;
+        }
+
+        let scheduleData = {
+            title: title,
+            description: description,
+            assignee: assignee,
+            date: date,
+            password: password
+        };
+
+        console.log("전송할 데이터:", scheduleData);
+
+        $.ajax({
+            type: "PUT",
+            url: `/api/schedules/${scheduleId}`,
+            contentType: "application/json",
+            data: JSON.stringify(scheduleData),
+            success: function(response) {
+                alert('스케줄이 성공적으로 수정되었습니다.');
+                $('#scheduleModal').modal('hide');
+                $(`#schedule-${scheduleId} .card-title`).text(scheduleData.title);
+                $(`#schedule-${scheduleId} .card-text`).text(scheduleData.assignee);
+
+                // 수정 및 삭제 버튼을 다시 보이게 설정
+                $('#editButton').show();
+                $('#deleteButton').show();
+
+                // 저장 버튼 삭제
+                $('#saveButton').remove();
+            },
+            error: function() {
+                alert('스케줄 수정 실패');
+            }
+        });
+    }
+
+    function deleteSchedule(scheduleId) {
+        if (confirm('이 스케줄을 삭제하시겠습니까?')) {
+            $.ajax({
+                type: 'DELETE',
+                url: `/api/schedules/${scheduleId}`,
+                success: function() {
+                    alert('스케줄이 성공적으로 삭제되었습니다.');
+                    $(`#schedule-${scheduleId}`).remove();
+                    $('#scheduleModal').modal('hide');
+                },
+                error: function() {
+                    alert('스케줄 삭제 실패');
+                }
+            });
+        }
+    }
+
+    function showAddScheduleForm() {
+        $('#scheduleFormModal').modal('show');
+    }
+
+    function createSchedule() {
+        if ($.trim($('#title').val()) === "" || $.trim($('#description').val()) === "" ||
+            $.trim($('#assignee').val()) === "" || $.trim($('#date').val()) === "" || $.trim($('#password').val()) === "") {
+            alert('모든 필드를 채워주세요');
+            return;
+        }
+
+        let scheduleData = {
+            title: $('#title').val(),
+            description: $('#description').val(),
+            assignee: $('#assignee').val(),
+            date: $('#date').val(),
+            password: $('#password').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '/api/schedules',
+            contentType: "application/json",
+            data: JSON.stringify(scheduleData),
+            success: function(response) {
+                alert('스케줄이 성공적으로 생성되었습니다.');
+                addScheduleToList(response);
+                $('#scheduleForm').trigger("reset");
+                $('#scheduleFormModal').modal('hide');
+            },
+            error: function() {
+                alert('스케줄 저장 실패');
+            }
+        });
+    }
+</script>
+</body>
+</html>
