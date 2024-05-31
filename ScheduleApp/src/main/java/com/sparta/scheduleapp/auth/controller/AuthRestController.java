@@ -68,6 +68,5 @@ public class AuthRestController {
         String newAccessToken = jwtUtil.refreshToken(refreshToken);
         TokenResponseDto tokenResponseDto = new TokenResponseDto(newAccessToken, refreshToken);
         return ResponseEntity.ok(tokenResponseDto);
-
     }
 }

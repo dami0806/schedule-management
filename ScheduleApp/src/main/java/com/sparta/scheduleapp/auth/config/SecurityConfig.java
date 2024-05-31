@@ -1,6 +1,9 @@
 package com.sparta.scheduleapp.auth.config;
 
 import com.sparta.scheduleapp.auth.filter.JwtAuthenticationFilter;
+import com.sparta.scheduleapp.auth.repository.UserRepository;
+import com.sparta.scheduleapp.auth.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,10 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.swing.*;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +24,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -51,9 +54,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-        /**
-         * jwtAuthenticationFilter 후에 password 필터 지정
-         */
+        // jwtAuthenticationFilter의 순서를 지정해주기위해 UsernamePasswordAuthenticationFilter전으로 위치 지정
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
