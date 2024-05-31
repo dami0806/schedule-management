@@ -70,10 +70,9 @@
 |-----------|------|
 | **Use Case Diagram** | <img width="700" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/4dab83c8-99f3-456d-be1a-b90ab3806191">|
 |Erd| <img width="600" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/157a0997-236a-43a3-afaf-1f2d89cf4533">|
-| 로그인 시 토큰값 발급 |<img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
 |회원가입 |<img width="984" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/f961fd00-242f-47ec-877c-bc9c3085759b">|
-|로그인 | <img width="1157" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/37f3d94b-8971-457e-a394-706d7c5cabe3">|
-|토큰값 갱신||
+|로그인 |<img width="900" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/84869d9c-2f1f-41ef-931e-bb61883cb5db">|
+|토큰값 갱신|<img width="1000" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/1a30c63b-2435-4879-88f6-aa217777ceac">|
 |스케줄 작성|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/738babdb-ab3f-42bc-bb68-a40b262998f4">|
 |스케줄 목록조회|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/b7aa9a51-a1be-4911-926b-6a0c29586fa4">|
 |스케줄 수정|<img width="900" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/2a09107b-d857-401e-abb3-4d377926d0a5">|
@@ -85,7 +84,7 @@
 ### + 초반 작업
 | 작업 내용 | 사진 |
 |-----------|------|
-| **Use Case Diagram** | <img width="700" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/4dab83c8-99f3-456d-be1a-b90ab3806191">|
+| **Use Case Diagram** | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/4845f900-75c3-47e4-89c1-0e6e36636b9a">|
 | **ERD 다이어그램** | <img width="300" alt="ERD 다이어그램" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/d84e206b-ce73-42fe-9f28-fdaad2564cfd"> |
 |  **초기 프로젝트 스크린샷**  |   |
 | 할일추가 <br> - 전체일정 <br> - 세부사항 <br> - 수정 & 삭제 시 <br>  비밀번호 유효성검사 | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/f2dbf2ca-df7e-48a1-a8d1-38f5ce490bdf" > <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/feae617c-4fd8-423b-b955-870506637133">  <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/9e473814-f11c-4c18-9924-b14f5b9e2d50">  <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/07781081-dab7-428c-bde8-82becd37c624">||
