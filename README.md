@@ -66,7 +66,8 @@
 
 | 작업 내용 | 사진 |
 |-----------|------|
-| **Use Case Diagram** | <img width="500" alt="image" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/4845f900-75c3-47e4-89c1-0e6e36636b9a">|
+| **Use Case Diagram** | <img width="700" alt="image" src="https://github.com/dami0806/schedule-management/assets/85047035/4dab83c8-99f3-456d-be1a-b90ab3806191">
+|
 | **API**  <br> 1. 일정관리 <br> 2 <br> 파일 업로드, <br> 다운로드| <img width="500" alt="스케줄 API" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/bc4f79a6-1aa6-4833-8e0d-74ce6532e685"> <img width="500" alt="파일 업로드, 다운로드" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/a87acb44-2938-439c-802c-eed12b5a659b"> |
 | **ERD 다이어그램** | <img width="300" alt="ERD 다이어그램" src="https://github.com/dami0806/ScheduleManagement/assets/85047035/d84e206b-ce73-42fe-9f28-fdaad2564cfd"> |
 |  **프로젝트 스크린샷**  |   |
