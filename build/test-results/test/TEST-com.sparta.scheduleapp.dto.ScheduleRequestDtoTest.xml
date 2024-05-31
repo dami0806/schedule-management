@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.sparta.scheduleapp.dto.ScheduleRequestDtoTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-22T01:27:44" hostname="bagdamiui-MacBookAir.local" time="0.113">
-  <properties/>
-  <testcase name="비밀번호 검증 테스트 - 잘못된 이메일 형식" classname="com.sparta.scheduleapp.dto.ScheduleRequestDtoTest" time="0.113"/>
-  <system-out><![CDATA[10:27:44.707 [Test worker] INFO org.hibernate.validator.internal.util.Version -- HV000001: Hibernate Validator 8.0.1.Final
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
