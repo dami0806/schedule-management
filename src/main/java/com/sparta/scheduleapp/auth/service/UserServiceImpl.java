@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder; // 과제에 맞춰서 암호화 안썼는데 과제제출 후 다시 쓰고싶어서 남겨둠
     private final JwtUtil jwtUtil;
 
@@ -44,14 +45,13 @@ public class UserServiceImpl implements UserService {
 
         }
 
-        String password = signupRequest.getPassword();
+        String encodedPassword = passwordEncoder.encode( signupRequest.getPassword());
 
         // password  최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)
         if (!signupRequest.getPassword().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,15}$")) {
             throw new IllegalArgumentException("비밀번호은 최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z)와 숫자(0~9)로 구성되어야 합니다.");
         }
-        // 비밀번호 인코딩 암호화했다가 조건에서 풀라함
-        //    String password = passwordEncoder.encode(requestDto.getPassword());
+
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 새로운 사용자 객체 생성 - 등록
-        User user = new User(username, password, email, role);
+        User user = new User(username, encodedPassword, email, role);
         userRepository.save(user);
         log.warn("회원가입 성공: " + user.getUsername());
     }
@@ -86,13 +86,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new InfoNotCorrectedException("이름과 비밀번호가 일치하지 않습니다."));
 
-//        if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
-//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-        // 평문끼리 비교
-        if (!loginRequest.getPassword().equals(user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);
         }
+//        // 평문끼리 비교
+//        if (!loginRequest.getPassword().equals(user.getPassword())) {
+//            throw new InvalidPasswordException(ErrorMessage.INVALID_PASSWORD);
+//        }
 
         String token = jwtUtil.createAccessToken(user.getUsername());
         log.info("로그인 성공: 사용자 {}, 토큰 {}", user.getUsername(), token);
