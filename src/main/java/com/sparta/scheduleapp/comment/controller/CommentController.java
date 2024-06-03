@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "CommentController", description = "댓글 API")
 
 public class CommentController {
-    @Autowired
-    private CommentService commentService;
+
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     // 댓글 작성
     @PostMapping("{scheduleId}/comments")
