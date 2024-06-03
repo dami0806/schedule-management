@@ -4,7 +4,6 @@ import com.sparta.scheduleapp.exception.message.file.FileNotSaveException;
 import com.sparta.scheduleapp.exception.message.file.FileTypeNotAllowedException;
 import com.sparta.scheduleapp.file.entity.File;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -25,11 +25,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      *요청 필터링: JWT 토큰을 검증해서 유효하면 사용자 정보 설정
