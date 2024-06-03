@@ -122,7 +122,7 @@ public class ScheduleService {
                         .build();
             }catch (IOException e) {
                 log.error("파일 저장 중 오류 발생: {}", e.getMessage());
-                throw new FileNotSaveException("파일 저장 중 오류 발생"); // 필요에 따라 사용자 정의 예외를 던질 수도 있습니다.
+                throw new FileNotSaveException("파일 저장 중 오류 발생");
             }
         }
         return null;
