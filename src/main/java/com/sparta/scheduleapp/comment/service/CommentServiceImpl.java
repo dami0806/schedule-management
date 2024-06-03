@@ -8,6 +8,7 @@ import com.sparta.scheduleapp.exception.UnauthorizedException;
 import com.sparta.scheduleapp.exception.message.ErrorMessage;
 import com.sparta.scheduleapp.schedule.entity.Schedule;
 import com.sparta.scheduleapp.schedule.repository.ScheduleRepository;
+import com.sparta.scheduleapp.schedule.service.ScheduleService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,15 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
-    private final ScheduleRepository scheduleRepository;
-
-    public CommentServiceImpl(CommentRepository commentRepository, ScheduleRepository scheduleRepository) {
+    private final ScheduleService scheduleService;
+    public CommentServiceImpl(CommentRepository commentRepository, ScheduleService scheduleService) {
         this.commentRepository = commentRepository;
-        this.scheduleRepository = scheduleRepository;
+        this.scheduleService = scheduleService;
     }
     // 댓글 추가
     @Transactional // 트랜잭션 관리
     public Comment addComment(Long scheduleId, String content, String userId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ScheduleNotFoundException(ErrorMessage.SCHEDULE_NOT_FOUND));
-        // 스케줄 존재 여부 확인
+        Schedule schedule = scheduleService.findScheduleById(scheduleId);// 스케줄 존재 여부 확인
         Comment comment = Comment.builder()
                 .content(content)
                 .userId(userId)
@@ -66,6 +64,11 @@ public class CommentServiceImpl implements CommentService {
         }
 
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public Optional<Comment> findCommentById(Long commentId) {
+        return commentRepository.findById(commentId);
     }
 
 }

@@ -19,4 +19,5 @@ public interface CommentService {
     Comment addComment(Long scheduleId, String content, String userId);
     Comment updateComment(Long commentId, String updatedComment, String userId);
     void deleteComment(Long commentId, String userId);
+    Optional<Comment> findCommentById(Long commentId);
 }
